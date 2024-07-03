@@ -1,0 +1,32 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build and Push Docker Image
+        run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker build -t $DOCKER_USERNAME/educablog:latest \
+           --build-arg PORT_APP=${{ secrets.PORT_APP }} \
+           --build-arg PORT_DATABASE=${{ secrets.PORT_DATABASE }} \
+           --build-arg HOST_DATABASE=${{ secrets.HOST_DATABASE }} \
+           --build-arg USER_DATABASE=${{ secrets.USER_DATABASE }} \
+           --build-arg PASS_DATABASE=${{ secrets.PASS_DATABASE }} \
+           --build-arg NAME_DATABASE=${{ secrets.NAME_DATABASE }} \
+           --build-arg ENV=${{ secrets.ENV }} \
+           --build-arg JWT_SECRETS=${{ secrets.JWT_SECRETS }} .
+          docker push $DOCKER_USERNAME/educablog:latest
