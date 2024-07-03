@@ -1,0 +1,31 @@
+# Configuração do Prometheus para Milvus
+# Requer prometheus 2.X
+# Configuração global
+global:
+  scrape_interval:     15s # Define o intervalo de leitura a cada 2 segundos. O padrão é a cada 1 minuto.
+  evaluation_interval: 15s # Avalia as regras a cada 2 segundos. O padrão é a cada 1 minuto.
+  # scrape_timeout está definido para o padrão global (10s).
+
+# Configuração do monitoramento de alertas
+# alerting:
+#   alertmanagers:
+#   - static_configs:
+#     - targets: ['localhost:9093']
+
+# Carrega as regras uma vez e avalia elas periodicamente de acordo com o 'evaluation_interval' global.
+#rule_files:
+#   - "alert_rules.yml" # Adicionar o arquivo de regras
+
+# Uma configuração de leitura contendo exatamente um endpoint para ler os dados:
+# Aqui é o próprio Prometheus.
+scrape_configs:
+  # O nome do Job é adicionado como um rótulo `job=<job_name>` a qualquer série temporal extraída desta configuração.
+  - job_name: 'prometheus'
+    scrape_interval: 5s # Intervalo de tempo entre cada leitura
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node-app'
+    scrape_interval: 1s # Intervalo de tempo entre cada leitura
+    static_configs:
+      - targets: ['app:3010']
