@@ -21,12 +21,12 @@ jobs:
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker build -t $DOCKER_USERNAME/educablog:latest \
-           --build-arg PORT_APP=${{ secrets.PORT_APP }} \
-           --build-arg PORT_DATABASE=${{ secrets.PORT_DATABASE }} \
-           --build-arg HOST_DATABASE=${{ secrets.HOST_DATABASE }} \
-           --build-arg USER_DATABASE=${{ secrets.USER_DATABASE }} \
-           --build-arg PASS_DATABASE=${{ secrets.PASS_DATABASE }} \
-           --build-arg NAME_DATABASE=${{ secrets.NAME_DATABASE }} \
+           --build-arg PORT=${{ secrets.PORT_APP }} \
+           --build-arg POSTGRES_PORT=${{ secrets.PORT_DATABASE }} \
+           --build-arg POSTGRES_HOST=${{ secrets.HOST_DATABASE }} \
+           --build-arg POSTGRES_USER=${{ secrets.USER_DATABASE }} \
+           --build-arg POSTGRES_PASSWORD=${{ secrets.PASS_DATABASE }} \
+           --build-arg POSTGRES_DB=${{ secrets.NAME_DATABASE }} \
            --build-arg ENV=${{ secrets.ENV }} \
            --build-arg JWT_SECRETS=${{ secrets.JWT_SECRETS }} .
           docker push $DOCKER_USERNAME/educablog:latest
