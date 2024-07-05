@@ -22,20 +22,9 @@ export class Postagem implements IPostagem {
   })
   descricao: string;
 
-  /*
-  @Column()
-  idPostagemCategoria: number;
-
-  @Column()
-  idUsuarioCriacao: number;
-
-  @Column()
-  dataHoraCriacao: Date;
-
-  @Column()
-  idUsuarioAtualizacao: number;
-
-  @Column()
-  dataHoraAtualizacao: Date;
-  */
+  @Column({
+    name: 'imagem_url',
+    type: 'varchar',
+  })
+  imagem_url: string;
 }

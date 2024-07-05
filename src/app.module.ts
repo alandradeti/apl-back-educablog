@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { UsuarioModule } from './usuario/usuario.module';
+import { CategoriaModule } from './categoria/categoria.module';
 
 @Module({
   imports: [
@@ -24,12 +26,14 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
       synchronize: true,
       logging: process.env.NODE_ENV === 'development',
     }),
-    PostagemModule,
     JwtModule.register({
       global: true,
       secret: process.env.SECRET,
       signOptions: { expiresIn: '10m' },
     }),
+    PostagemModule,
+    UsuarioModule,
+    CategoriaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

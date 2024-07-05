@@ -9,7 +9,7 @@ import { PrometheusService } from '../services/prometheus.service';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
-  constructor(private readonly prometheusService: PrometheusService) {}
+  constructor(private readonly service: PrometheusService) {}
   intercept(
     context: ExecutionContext,
     next: CallHandler<any>,
@@ -24,7 +24,7 @@ export class LoggingInterceptor implements NestInterceptor {
         console.log(`After... ${Date.now() - now}ms`);
 
         const duration = Date.now() - now;
-        this.prometheusService.sendMetrics
+        this.service.sendMetrics
           .labels(request.route.path)
           .observe(duration / 1000);
       }),

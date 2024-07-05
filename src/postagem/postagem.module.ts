@@ -5,7 +5,7 @@ import { PostagemPgRepository } from './repositories/pg/postagem.pg.repository';
 import { PostagemController } from './controllers/postagem.controller';
 import { PostagemService } from './services/postagem.service';
 import { PostagemRepository } from './repositories/postagem.repository';
-import { PrometheusService } from 'src/shared/services/prometheus.service';
+//import { PrometheusService } from 'src/shared/services/prometheus.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Postagem])],
@@ -15,7 +15,7 @@ import { PrometheusService } from 'src/shared/services/prometheus.service';
       useClass: PostagemPgRepository,
     },
     PostagemService,
-    PrometheusService,
+    //PrometheusService,
   ],
   controllers: [PostagemController],
 })
