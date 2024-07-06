@@ -23,7 +23,7 @@ const createCategoriaSchema = z.object({
 });
 
 const updateCategoriaSchema = z.object({
-  id: z.string().uuid(),
+  id: z.coerce.number().optional(),
   nome: z.string(),
 });
 
@@ -45,7 +45,7 @@ export class CategoriaController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string) {
+  async findById(@Param('id') id: number) {
     return this.service.findById(id);
   }
 
@@ -70,7 +70,7 @@ export class CategoriaController {
   @ApiBearerAuth()
   //@UseGuards(AuthGuard)
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: number) {
     return this.service.delete(id);
   }
 }

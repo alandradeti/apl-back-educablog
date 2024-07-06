@@ -10,7 +10,7 @@ export class CategoriaService {
     return this.repository.findAll(limit, page);
   }
 
-  async findById(id: string): Promise<ICategoria> {
+  async findById(id: number): Promise<ICategoria> {
     const categoria = await this.repository.findById(id);
     if (!categoria) throw new NotFoundException('Categoria não encontrada!');
     return categoria;
@@ -24,7 +24,7 @@ export class CategoriaService {
     await this.repository.update(categoria);
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: number): Promise<void> {
     await this.repository.delete(id);
   }
 }

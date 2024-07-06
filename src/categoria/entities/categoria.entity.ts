@@ -8,7 +8,7 @@ export class Categoria implements ICategoria {
   @PrimaryGeneratedColumn('uuid', {
     name: 'id',
   })
-  id?: string | undefined;
+  id?: number | undefined;
 
   @Column({
     name: 'nome',

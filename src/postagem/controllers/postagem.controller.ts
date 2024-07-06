@@ -21,14 +21,30 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 const createPostagemSchema = z.object({
   titulo: z.string(),
   descricao: z.string(),
-  imagem_url: z.string(),
+  imagemUrl: z.string(),
+  categorias: z
+    .array(
+      z.object({
+        id: z.coerce.number().optional(),
+        nome: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 const updatePostagemSchema = z.object({
   id: z.string().uuid(),
   titulo: z.string(),
   descricao: z.string(),
-  imagem_url: z.string(),
+  imagemUrl: z.string(),
+  categorias: z
+    .array(
+      z.object({
+        id: z.coerce.number().optional(),
+        nome: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 type CreatePostagem = z.infer<typeof createPostagemSchema>;
@@ -57,8 +73,16 @@ export class PostagemController {
   //@UseGuards(AuthGuard)
   @UsePipes(new ZodValidationPipe(createPostagemSchema))
   @Post()
-  async create(@Body() { titulo, descricao, imagem_url }: CreatePostagem) {
-    return this.service.create({ titulo, descricao, imagem_url });
+  async create(
+    @Body()
+    { titulo, descricao, imagemUrl, categorias }: CreatePostagem,
+  ) {
+    return this.service.create({
+      titulo,
+      descricao,
+      imagemUrl,
+      categorias: categorias.map(({ id, nome }) => ({ id, nome })),
+    });
   }
 
   @ApiBearerAuth()
@@ -66,9 +90,15 @@ export class PostagemController {
   @Put()
   async update(
     @Body(new ZodValidationPipe(updatePostagemSchema))
-    { id, titulo, descricao, imagem_url }: UpdatePostagem,
+    { id, titulo, descricao, imagemUrl, categorias }: UpdatePostagem,
   ) {
-    return this.service.update({ id, titulo, descricao, imagem_url });
+    return this.service.update({
+      id,
+      titulo,
+      descricao,
+      imagemUrl,
+      categorias: categorias.map(({ id, nome }) => ({ id, nome })),
+    });
   }
 
   @ApiBearerAuth()

@@ -16,21 +16,21 @@ export class CategoriaPgRepository implements CategoriaRepository {
     });
   }
 
-  async findById(id: string): Promise<ICategoria | null> {
+  async findById(id: number): Promise<ICategoria | null> {
     return await this.repository.findOne({
       where: { id },
     });
   }
 
   async create(categoria: ICategoria): Promise<void> {
-    await this.repository.insert(categoria);
+    await this.repository.save(categoria);
   }
 
   async update(categoria: ICategoria): Promise<void> {
-    await this.repository.update({ id: categoria.id }, categoria);
+    await this.repository.save(categoria);
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: number): Promise<void> {
     await this.repository.delete(id);
   }
 }
