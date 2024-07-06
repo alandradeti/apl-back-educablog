@@ -15,36 +15,34 @@ import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
 //import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { PessoaService } from '../services/pessoa.service';
 //import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
-import { UsuarioService } from '../services/usuario.service';
 
-const createUsuarioSchema = z.object({
-  login: z.string(),
-  senha: z.string(),
+const createPessoaSchema = z.object({
+  cpf: z.string(),
   nome: z.string(),
   email: z.string().email(),
   dataNascimento: z.coerce.date(),
   telefone: z.string(),
 });
 
-const updateUsuarioSchema = z.object({
+const updatePessoaSchema = z.object({
   id: z.string().uuid(),
-  login: z.string(),
-  senha: z.string(),
+  cpf: z.string(),
   nome: z.string(),
   email: z.string().email(),
   dataNascimento: z.coerce.date(),
   telefone: z.string(),
 });
 
-type CreateUsuario = z.infer<typeof createUsuarioSchema>;
-type UpdateUsuario = z.infer<typeof updateUsuarioSchema>;
+type CreatePessoa = z.infer<typeof createPessoaSchema>;
+type UpdatePessoa = z.infer<typeof updatePessoaSchema>;
 
-@ApiTags('usuario')
+@ApiTags('pessoa')
 //@UseInterceptors(LoggingInterceptor)
-@Controller('usuario')
-export class UsuarioController {
-  constructor(private readonly service: UsuarioService) {}
+@Controller('pessoa')
+export class PessoaController {
+  constructor(private readonly service: PessoaService) {}
 
   @Get()
   async findAll(
@@ -61,15 +59,14 @@ export class UsuarioController {
 
   @ApiBearerAuth()
   //@UseGuards(AuthGuard)
-  @UsePipes(new ZodValidationPipe(createUsuarioSchema))
+  @UsePipes(new ZodValidationPipe(createPessoaSchema))
   @Post()
   async create(
     @Body()
-    { login, senha, nome, email, dataNascimento, telefone }: CreateUsuario,
+    { cpf, nome, email, dataNascimento, telefone }: CreatePessoa,
   ) {
     return this.service.create({
-      login,
-      senha,
+      cpf,
       nome,
       email,
       dataNascimento,
@@ -81,13 +78,12 @@ export class UsuarioController {
   //@UseGuards(AuthGuard)
   @Put()
   async update(
-    @Body(new ZodValidationPipe(updateUsuarioSchema))
-    { id, login, senha, nome, email, dataNascimento, telefone }: UpdateUsuario,
+    @Body(new ZodValidationPipe(updatePessoaSchema))
+    { id, cpf, nome, email, dataNascimento, telefone }: UpdatePessoa,
   ) {
     return this.service.update({
       id,
-      login,
-      senha,
+      cpf,
       nome,
       email,
       dataNascimento,

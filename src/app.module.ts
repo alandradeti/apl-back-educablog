@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { UsuarioModule } from './usuario/usuario.module';
+import { PessoaModule } from './pessoa/pessoa.module';
 import { CategoriaModule } from './categoria/categoria.module';
 
 @Module({
@@ -32,7 +32,7 @@ import { CategoriaModule } from './categoria/categoria.module';
       signOptions: { expiresIn: '10m' },
     }),
     PostagemModule,
-    UsuarioModule,
+    PessoaModule,
     CategoriaModule,
   ],
   controllers: [AppController],

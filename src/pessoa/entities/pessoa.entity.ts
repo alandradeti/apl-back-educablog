@@ -1,26 +1,20 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IUsuario } from './interfaces/usuario.interface';
+import { IPessoa } from '../entities/interfaces/pessoa.interface';
 
 @Entity({
-  name: 'usuario',
+  name: 'pessoa',
 })
-export class Usuario implements IUsuario {
+export class Pessoa implements IPessoa {
   @PrimaryGeneratedColumn('uuid', {
     name: 'id',
   })
   id?: string | undefined;
 
   @Column({
-    name: 'login',
+    name: 'cpf',
     type: 'varchar',
   })
-  login: string;
-
-  @Column({
-    name: 'senha',
-    type: 'varchar',
-  })
-  senha: string;
+  cpf: string;
 
   @Column({
     name: 'nome',

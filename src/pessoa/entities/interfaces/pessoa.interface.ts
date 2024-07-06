@@ -1,7 +1,6 @@
-export interface IUsuario {
+export interface IPessoa {
   id?: string;
-  login: string;
-  senha: string;
+  cpf: string;
   nome: string;
   email: string;
   dataNascimento: Date;
