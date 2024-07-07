@@ -1,0 +1,36 @@
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CategoriaRepository } from '../categoria.repository';
+import { Categoria } from 'src/categoria/entities/categoria.entity';
+import { ICategoria } from 'src/categoria/entities/interfaces/categoria.interface';
+
+export class CategoriaPgRepository implements CategoriaRepository {
+  constructor(
+    @InjectRepository(Categoria) private repository: Repository<Categoria>,
+  ) {}
+
+  async findAll(pagina: number, limite: number): Promise<ICategoria[]> {
+    return this.repository.find({
+      skip: (pagina - 1) * limite,
+      take: limite,
+    });
+  }
+
+  async findById(id: number): Promise<ICategoria | null> {
+    return await this.repository.findOne({
+      where: { id },
+    });
+  }
+
+  async create(categoria: ICategoria): Promise<void> {
+    await this.repository.save(categoria);
+  }
+
+  async update(categoria: ICategoria): Promise<void> {
+    await this.repository.save(categoria);
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.repository.delete(id);
+  }
+}

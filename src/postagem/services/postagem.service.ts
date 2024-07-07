@@ -4,27 +4,27 @@ import { PostagemRepository } from '../repositories/postagem.repository';
 
 @Injectable()
 export class PostagemService {
-  constructor(private readonly postagemRepository: PostagemRepository) {}
+  constructor(private readonly repository: PostagemRepository) {}
 
   async findAll(limit: number, page: number): Promise<IPostagem[]> {
-    return this.postagemRepository.findAll(limit, page);
+    return this.repository.findAll(limit, page);
   }
 
   async findById(id: string): Promise<IPostagem> {
-    const postagem = await this.postagemRepository.findById(id);
+    const postagem = await this.repository.findById(id);
     if (!postagem) throw new NotFoundException('Postagem não encontrada!');
     return postagem;
   }
 
   async create(postagem: IPostagem): Promise<void> {
-    await this.postagemRepository.create(postagem);
+    await this.repository.create(postagem);
   }
 
   async update(postagem: IPostagem): Promise<void> {
-    await this.postagemRepository.update(postagem);
+    await this.repository.update(postagem);
   }
 
   async delete(id: string): Promise<void> {
-    await this.postagemRepository.delete(id);
+    await this.repository.delete(id);
   }
 }

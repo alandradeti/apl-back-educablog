@@ -1,0 +1,76 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+  //UseInterceptors,
+  UsePipes,
+} from '@nestjs/common';
+import { CategoriaService } from '../services/categoria.service';
+import { z } from 'zod';
+import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+//import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
+
+const createCategoriaSchema = z.object({
+  nome: z.string(),
+});
+
+const updateCategoriaSchema = z.object({
+  id: z.coerce.number().optional(),
+  nome: z.string(),
+});
+
+type CreateCategoria = z.infer<typeof createCategoriaSchema>;
+type UpdateCategoria = z.infer<typeof updateCategoriaSchema>;
+
+@ApiTags('categoria')
+//@UseInterceptors(LoggingInterceptor)
+@Controller('categoria')
+export class CategoriaController {
+  constructor(private readonly service: CategoriaService) {}
+
+  @Get()
+  async findAll(
+    @Query('limite') limite: number,
+    @Query('pagina') pagina: number,
+  ) {
+    return this.service.findAll(limite, pagina);
+  }
+
+  @Get(':id')
+  async findById(@Param('id') id: number) {
+    return this.service.findById(id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @UsePipes(new ZodValidationPipe(createCategoriaSchema))
+  @Post()
+  async create(@Body() { nome }: CreateCategoria) {
+    return this.service.create({ nome });
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Put()
+  async update(
+    @Body(new ZodValidationPipe(updateCategoriaSchema))
+    { id, nome }: UpdateCategoria,
+  ) {
+    return this.service.update({ id, nome });
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return this.service.delete(id);
+  }
+}

@@ -8,7 +8,7 @@ import {
   Put,
   Query,
   UseGuards,
-  UseInterceptors,
+  //UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { PostagemService } from '../services/postagem.service';
@@ -16,47 +16,73 @@ import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
+//import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
 
 const createPostagemSchema = z.object({
   titulo: z.string(),
   descricao: z.string(),
+  imagemUrl: z.string(),
+  categorias: z
+    .array(
+      z.object({
+        id: z.coerce.number().optional(),
+        nome: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 const updatePostagemSchema = z.object({
   id: z.string().uuid(),
   titulo: z.string(),
   descricao: z.string(),
+  imagemUrl: z.string(),
+  categorias: z
+    .array(
+      z.object({
+        id: z.coerce.number().optional(),
+        nome: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 type CreatePostagem = z.infer<typeof createPostagemSchema>;
 type UpdatePostagem = z.infer<typeof updatePostagemSchema>;
 
 @ApiTags('postagem')
-@UseInterceptors(LoggingInterceptor)
+//@UseInterceptors(LoggingInterceptor)
 @Controller('postagem')
 export class PostagemController {
-  constructor(private readonly postagemService: PostagemService) {}
+  constructor(private readonly service: PostagemService) {}
 
   @Get()
   async findAll(
     @Query('limite') limite: number,
     @Query('pagina') pagina: number,
   ) {
-    return this.postagemService.findAll(limite, pagina);
+    return this.service.findAll(limite, pagina);
   }
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return this.postagemService.findById(id);
+    return this.service.findById(id);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @UsePipes(new ZodValidationPipe(createPostagemSchema))
   @Post()
-  async create(@Body() { titulo, descricao }: CreatePostagem) {
-    return this.postagemService.create({ titulo, descricao });
+  async create(
+    @Body()
+    { titulo, descricao, imagemUrl, categorias }: CreatePostagem,
+  ) {
+    return this.service.create({
+      titulo,
+      descricao,
+      imagemUrl,
+      categorias: categorias.map(({ id, nome }) => ({ id, nome })),
+    });
   }
 
   @ApiBearerAuth()
@@ -64,15 +90,21 @@ export class PostagemController {
   @Put()
   async update(
     @Body(new ZodValidationPipe(updatePostagemSchema))
-    { id, titulo, descricao }: UpdatePostagem,
+    { id, titulo, descricao, imagemUrl, categorias }: UpdatePostagem,
   ) {
-    return this.postagemService.update({ id, titulo, descricao });
+    return this.service.update({
+      id,
+      titulo,
+      descricao,
+      imagemUrl,
+      categorias: categorias.map(({ id, nome }) => ({ id, nome })),
+    });
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return this.postagemService.delete(id);
+    return this.service.delete(id);
   }
 }

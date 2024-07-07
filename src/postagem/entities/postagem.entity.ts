@@ -1,5 +1,13 @@
+import { Categoria } from 'src/categoria/entities/categoria.entity';
 import { IPostagem } from './interfaces/postagem.interface';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ICategoria } from 'src/categoria/entities/interfaces/categoria.interface';
 
 @Entity({
   name: 'postagem',
@@ -22,20 +30,25 @@ export class Postagem implements IPostagem {
   })
   descricao: string;
 
-  /*
-  @Column()
-  idPostagemCategoria: number;
+  @Column({
+    name: 'imagem_url',
+    type: 'varchar',
+  })
+  imagemUrl: string;
 
-  @Column()
-  idUsuarioCriacao: number;
-
-  @Column()
-  dataHoraCriacao: Date;
-
-  @Column()
-  idUsuarioAtualizacao: number;
-
-  @Column()
-  dataHoraAtualizacao: Date;
-  */
+  @ManyToMany(() => Categoria, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: 'postagem_categoria',
+    joinColumn: {
+      name: 'id_postagem',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'id_categoria',
+      referencedColumnName: 'id',
+    },
+  })
+  categorias?: ICategoria[] | undefined;
 }

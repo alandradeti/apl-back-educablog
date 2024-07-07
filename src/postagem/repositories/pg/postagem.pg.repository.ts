@@ -11,6 +11,7 @@ export class PostagemPgRepository implements PostagemRepository {
 
   async findAll(pagina: number, limite: number): Promise<IPostagem[]> {
     return this.repository.find({
+      relations: ['categorias'],
       skip: (pagina - 1) * limite,
       take: limite,
     });
@@ -18,16 +19,17 @@ export class PostagemPgRepository implements PostagemRepository {
 
   async findById(id: string): Promise<IPostagem | null> {
     return await this.repository.findOne({
+      relations: ['categorias'],
       where: { id },
     });
   }
 
   async create(postagem: IPostagem): Promise<void> {
-    await this.repository.insert(postagem);
+    await this.repository.save(postagem);
   }
 
   async update(postagem: IPostagem): Promise<void> {
-    await this.repository.update({ id: postagem.id }, postagem);
+    await this.repository.save(postagem);
   }
 
   async delete(id: string): Promise<void> {

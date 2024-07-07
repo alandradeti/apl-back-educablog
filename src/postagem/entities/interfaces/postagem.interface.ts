@@ -1,10 +1,9 @@
+import { ICategoria } from 'src/categoria/entities/interfaces/categoria.interface';
+
 export interface IPostagem {
   id?: string;
   titulo: string;
   descricao: string;
-  /*idPostagemCategoria: number;
-  idUsuarioCriacao: number;
-  dataHoraCriacao: Date;
-  idUsuarioAtualizacao: number;
-  dataHoraAtualizacao: Date;*/
+  imagemUrl: string;
+  categorias?: ICategoria[];
 }
