@@ -124,6 +124,4 @@ create table pessoa
 
 create extension if not exists "uuid-ossp"
 ```
--
-
 <!-- slide -->
