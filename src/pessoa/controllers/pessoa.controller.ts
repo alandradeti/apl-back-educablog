@@ -7,13 +7,13 @@ import {
   Post,
   Put,
   Query,
-  //UseGuards,
+  UseGuards,
   //UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
-//import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PessoaService } from '../services/pessoa.service';
 //import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
@@ -24,6 +24,13 @@ const createPessoaSchema = z.object({
   email: z.string().email(),
   dataNascimento: z.coerce.date(),
   telefone: z.string(),
+  usuario: z
+    .object({
+      id: z.string().uuid().optional(),
+      login: z.string(),
+      senha: z.string(),
+    })
+    .optional(),
 });
 
 const updatePessoaSchema = z.object({
@@ -33,6 +40,13 @@ const updatePessoaSchema = z.object({
   email: z.string().email(),
   dataNascimento: z.coerce.date(),
   telefone: z.string(),
+  usuario: z
+    .object({
+      id: z.string().uuid().optional(),
+      login: z.string(),
+      senha: z.string(),
+    })
+    .optional(),
 });
 
 type CreatePessoa = z.infer<typeof createPessoaSchema>;
@@ -63,7 +77,7 @@ export class PessoaController {
   @Post()
   async create(
     @Body()
-    { cpf, nome, email, dataNascimento, telefone }: CreatePessoa,
+    { cpf, nome, email, dataNascimento, telefone, usuario }: CreatePessoa,
   ) {
     return this.service.create({
       cpf,
@@ -71,15 +85,20 @@ export class PessoaController {
       email,
       dataNascimento,
       telefone,
+      usuario: {
+        id: usuario?.id,
+        login: usuario?.login,
+        senha: usuario?.senha,
+      },
     });
   }
 
   @ApiBearerAuth()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Put()
   async update(
     @Body(new ZodValidationPipe(updatePessoaSchema))
-    { id, cpf, nome, email, dataNascimento, telefone }: UpdatePessoa,
+    { id, cpf, nome, email, dataNascimento, telefone, usuario }: UpdatePessoa,
   ) {
     return this.service.update({
       id,
@@ -88,11 +107,16 @@ export class PessoaController {
       email,
       dataNascimento,
       telefone,
+      usuario: {
+        id: usuario?.id,
+        login: usuario?.login,
+        senha: usuario?.senha,
+      },
     });
   }
 
   @ApiBearerAuth()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.service.delete(id);

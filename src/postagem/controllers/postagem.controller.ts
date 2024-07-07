@@ -7,14 +7,14 @@ import {
   Post,
   Put,
   Query,
-  //UseGuards,
+  UseGuards,
   //UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { PostagemService } from '../services/postagem.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
-//import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 //import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
 
@@ -70,7 +70,7 @@ export class PostagemController {
   }
 
   @ApiBearerAuth()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @UsePipes(new ZodValidationPipe(createPostagemSchema))
   @Post()
   async create(
@@ -86,7 +86,7 @@ export class PostagemController {
   }
 
   @ApiBearerAuth()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Put()
   async update(
     @Body(new ZodValidationPipe(updatePostagemSchema))
@@ -102,7 +102,7 @@ export class PostagemController {
   }
 
   @ApiBearerAuth()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.service.delete(id);
