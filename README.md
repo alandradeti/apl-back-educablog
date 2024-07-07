@@ -83,42 +83,42 @@ drop table if exists usuario;
 
 create table postagem
 (
-	id 						uuid 			primary key default uuid_generate_v4() 
-	,titulo 				varchar(100) 	not null 
-	,descricao 				varchar(1000) 	not null
-	,imagem_url 			varchar(255)	not null default ''
+	id uuid primary key default uuid_generate_v4() 
+	,titulo varchar(100) not null 
+	,descricao varchar(1000) not null
+	,imagem_url varchar(255) not null default ''
 );
 
 create table categoria
 (
-	id		serial 			primary key
-	,nome	varchar(255)	not null
+	id serial primary key
+	,nome	varchar(255) not null
 );
 
 create table postagem_categoria(
-	id_postagem 	uuid 		not null
-	,id_categoria 	serial  	not null
+	id_postagem uuid not null
+	,id_categoria serial not null
 	,primary key (id_postagem, id_categoria)
-	,foreign key (id_postagem) 		references postagem (id) 	on delete cascade
-	,foreign key (id_categoria) 	references categoria (id) 	on delete cascade
+	,foreign key (id_postagem) references postagem (id) on delete cascade
+	,foreign key (id_categoria) references categoria (id) on delete cascade
 );
 
 create table usuario
 (
-	id 			uuid 		primary key uuid_generate_v4() 
-  	,login 		varchar(10) NOT NULL
-    ,senha 		varchar(16) NOT null
+	id uuid primary key uuid_generate_v4() 
+  ,login varchar(10) not null
+  ,senha varchar(16) not null
 );
 
 create table pessoa
 (
-	id 						uuid 			primary key uuid_generate_v4() 
-	,cpf					varchar(11)		not null
-	,nome 					varchar(100) 	not null
-	,email					varchar(255) 	not null
-	,data_nascimento		date 			not null
-	,telefone				varchar(20) 	not null
-	,id_usuario				uuid			
+	id uuid primary key uuid_generate_v4() 
+	,cpf	varchar(11)	not null
+	,nome varchar(100) not null
+	,email varchar(255) not null
+	,data_nascimento date not null
+	,telefone varchar(20) not null
+	,id_usuario	uuid			
 	,constraint fk_usuario_id foreign key (id_usuario) references usuario(id)
 );
 
