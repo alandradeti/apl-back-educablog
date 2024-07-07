@@ -22,12 +22,12 @@ export class CategoriaPgRepository implements CategoriaRepository {
     });
   }
 
-  async create(categoria: ICategoria): Promise<void> {
-    await this.repository.save(categoria);
+  async create(categoria: ICategoria): Promise<ICategoria | null> {
+    return await this.repository.save(categoria);
   }
 
-  async update(categoria: ICategoria): Promise<void> {
-    await this.repository.save(categoria);
+  async update(categoria: ICategoria): Promise<ICategoria | null> {
+    return await this.repository.save(categoria);
   }
 
   async delete(id: number): Promise<void> {

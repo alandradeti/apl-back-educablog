@@ -16,12 +16,12 @@ export class PostagemService {
     return postagem;
   }
 
-  async create(postagem: IPostagem): Promise<void> {
-    await this.repository.create(postagem);
+  async create(postagem: IPostagem): Promise<IPostagem> {
+    return await this.repository.create(postagem);
   }
 
-  async update(postagem: IPostagem): Promise<void> {
-    await this.repository.update(postagem);
+  async update(postagem: IPostagem): Promise<IPostagem> {
+    return await this.repository.update(postagem);
   }
 
   async delete(id: string): Promise<void> {

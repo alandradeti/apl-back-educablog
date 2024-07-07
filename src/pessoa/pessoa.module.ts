@@ -5,7 +5,7 @@ import { PessoaRepository } from './repositories/pessoa.repository';
 import { PessoaPgRepository } from './repositories/pg/pessoa.pg.repository';
 import { PessoaService } from './services/pessoa.service';
 import { PessoaController } from './controllers/pessoa.controller';
-//import { PrometheusService } from 'src/shared/services/prometheus.service';
+import { PrometheusService } from 'src/shared/services/prometheus.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Pessoa])],
@@ -15,7 +15,7 @@ import { PessoaController } from './controllers/pessoa.controller';
       useClass: PessoaPgRepository,
     },
     PessoaService,
-    //PrometheusService,
+    PrometheusService,
   ],
   controllers: [PessoaController],
 })

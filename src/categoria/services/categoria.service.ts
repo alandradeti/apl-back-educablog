@@ -16,12 +16,12 @@ export class CategoriaService {
     return categoria;
   }
 
-  async create(categoria: ICategoria): Promise<void> {
-    await this.repository.create(categoria);
+  async create(categoria: ICategoria): Promise<ICategoria> {
+    return await this.repository.create(categoria);
   }
 
-  async update(categoria: ICategoria): Promise<void> {
-    await this.repository.update(categoria);
+  async update(categoria: ICategoria): Promise<ICategoria> {
+    return await this.repository.update(categoria);
   }
 
   async delete(id: number): Promise<void> {

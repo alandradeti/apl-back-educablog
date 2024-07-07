@@ -9,7 +9,7 @@ export class PostagemPgRepository implements PostagemRepository {
     @InjectRepository(Postagem) private repository: Repository<Postagem>,
   ) {}
 
-  async findAll(pagina: number, limite: number): Promise<IPostagem[]> {
+  async findAll(pagina: number, limite: number): Promise<IPostagem[] | null> {
     return this.repository.find({
       relations: ['categorias'],
       skip: (pagina - 1) * limite,
@@ -24,12 +24,12 @@ export class PostagemPgRepository implements PostagemRepository {
     });
   }
 
-  async create(postagem: IPostagem): Promise<void> {
-    await this.repository.save(postagem);
+  async create(postagem: IPostagem): Promise<IPostagem | null> {
+    return await this.repository.save(postagem);
   }
 
-  async update(postagem: IPostagem): Promise<void> {
-    await this.repository.save(postagem);
+  async update(postagem: IPostagem): Promise<IPostagem | null> {
+    return await this.repository.save(postagem);
   }
 
   async delete(id: string): Promise<void> {

@@ -7,20 +7,15 @@ import {
   Post,
   Put,
   UseGuards,
-  //UseInterceptors,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { UsuarioService } from '../services/usuario.service';
-//import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
-
-const sigInUsuarioSchema = z.object({
-  login: z.string(),
-  senha: z.string(),
-});
+import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
 
 const createUsuarioSchema = z.object({
   login: z.string(),
@@ -33,34 +28,32 @@ const updateUsuarioSchema = z.object({
   senha: z.string(),
 });
 
-type SigInUsuario = z.infer<typeof sigInUsuarioSchema>;
 type CreateUsuario = z.infer<typeof createUsuarioSchema>;
 type UpdateUsuario = z.infer<typeof updateUsuarioSchema>;
 
 @ApiTags('usuario')
-//@UseInterceptors(LoggingInterceptor)
+@UseInterceptors(LoggingInterceptor)
 @Controller('usuario')
 export class UsuarioController {
   constructor(private readonly service: UsuarioService) {}
-
-  @Get()
-  @UsePipes(new ZodValidationPipe(createUsuarioSchema))
-  async signIn(
-    @Body()
-    { login, senha }: SigInUsuario,
-  ) {
-    return this.service.signIn(login, senha);
-  }
 
   @Get(':id')
   async findById(@Param('id') id: string) {
     return this.service.findById(id);
   }
 
-  @ApiBearerAuth()
+  //@ApiBearerAuth()
   //@UseGuards(AuthGuard)
   @UsePipes(new ZodValidationPipe(createUsuarioSchema))
   @Post()
+  @ApiBody({
+    schema: {
+      properties: {
+        login: { type: 'string' },
+        senha: { type: 'string' },
+      },
+    },
+  })
   async create(
     @Body()
     { login, senha }: CreateUsuario,
@@ -74,6 +67,15 @@ export class UsuarioController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Put()
+  @ApiBody({
+    schema: {
+      properties: {
+        id: { type: 'string' },
+        login: { type: 'string' },
+        senha: { type: 'string' },
+      },
+    },
+  })
   async update(
     @Body(new ZodValidationPipe(updateUsuarioSchema))
     { id, login, senha }: UpdateUsuario,
