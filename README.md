@@ -105,14 +105,14 @@ create table postagem_categoria(
 
 create table usuario
 (
-  id uuid primary key uuid_generate_v4() 
+  id uuid primary key default uuid_generate_v4() 
   ,login varchar(10) not null
   ,senha varchar(16) not null
 );
 
 create table pessoa
 (
-  id uuid primary key uuid_generate_v4() 
+  id uuid primary key default uuid_generate_v4() 
   ,cpf varchar(11) not null
   ,nome varchar(100) not null
   ,email varchar(255) not null

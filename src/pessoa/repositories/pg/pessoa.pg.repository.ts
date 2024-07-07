@@ -9,7 +9,7 @@ export class PessoaPgRepository implements PessoaRepository {
     @InjectRepository(Pessoa) private repository: Repository<Pessoa>,
   ) {}
 
-  async findAll(pagina: number, limite: number): Promise<IPessoa[]> {
+  async findAll(pagina: number, limite: number): Promise<IPessoa[] | null> {
     return this.repository.find({
       relations: ['usuario'],
       skip: (pagina - 1) * limite,
@@ -24,12 +24,12 @@ export class PessoaPgRepository implements PessoaRepository {
     });
   }
 
-  async create(pessoa: IPessoa): Promise<void> {
-    await this.repository.save(pessoa);
+  async create(pessoa: IPessoa): Promise<IPessoa | null> {
+    return await this.repository.save(pessoa);
   }
 
-  async update(pessoa: IPessoa): Promise<void> {
-    await this.repository.save(pessoa);
+  async update(pessoa: IPessoa): Promise<IPessoa | null> {
+    return await this.repository.save(pessoa);
   }
 
   async delete(id: string): Promise<void> {

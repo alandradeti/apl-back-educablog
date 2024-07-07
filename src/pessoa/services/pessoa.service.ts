@@ -17,7 +17,7 @@ export class PessoaService {
     return pessoa;
   }
 
-  async create(pessoa: IPessoa): Promise<void> {
+  async create(pessoa: IPessoa): Promise<IPessoa> {
     const senhaCriptografada = await hash(pessoa.usuario.senha, 8);
 
     console.log(senhaCriptografada);
@@ -26,15 +26,15 @@ export class PessoaService {
 
     console.log(pessoa);
 
-    await this.repository.create(pessoa);
+    return await this.repository.create(pessoa);
   }
 
-  async update(pessoa: IPessoa): Promise<void> {
+  async update(pessoa: IPessoa): Promise<IPessoa> {
     const senhaCriptografada = await hash(pessoa.usuario.senha, 8);
 
     pessoa.usuario = { login: pessoa.usuario.login, senha: senhaCriptografada };
 
-    await this.repository.update(pessoa);
+    return await this.repository.update(pessoa);
   }
 
   async delete(id: string): Promise<void> {

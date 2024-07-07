@@ -20,13 +20,13 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(() => {
-        console.log('Route =>', request.route.path);
-        console.log(`After... ${Date.now() - now}ms`);
+        console.log('Rota =>', request.route.path);
+        console.log(`Tempo... ${Date.now() - now}ms`);
 
-        const duration = Date.now() - now;
+        const duracao = Date.now() - now;
         this.service.sendMetrics
           .labels(request.route.path)
-          .observe(duration / 1000);
+          .observe(duracao / 1000);
       }),
     );
   }

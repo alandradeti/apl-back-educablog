@@ -8,15 +8,15 @@ import {
   Put,
   Query,
   UseGuards,
-  //UseInterceptors,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { CategoriaService } from '../services/categoria.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-//import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
 
 const createCategoriaSchema = z.object({
   nome: z.string(),
@@ -31,7 +31,7 @@ type CreateCategoria = z.infer<typeof createCategoriaSchema>;
 type UpdateCategoria = z.infer<typeof updateCategoriaSchema>;
 
 @ApiTags('categoria')
-//@UseInterceptors(LoggingInterceptor)
+@UseInterceptors(LoggingInterceptor)
 @Controller('categoria')
 export class CategoriaController {
   constructor(private readonly service: CategoriaService) {}
@@ -53,6 +53,13 @@ export class CategoriaController {
   @UseGuards(AuthGuard)
   @UsePipes(new ZodValidationPipe(createCategoriaSchema))
   @Post()
+  @ApiBody({
+    schema: {
+      properties: {
+        nome: { type: 'string' },
+      },
+    },
+  })
   async create(@Body() { nome }: CreateCategoria) {
     return this.service.create({ nome });
   }
@@ -60,6 +67,14 @@ export class CategoriaController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Put()
+  @ApiBody({
+    schema: {
+      properties: {
+        id: { type: 'number' },
+        nome: { type: 'string' },
+      },
+    },
+  })
   async update(
     @Body(new ZodValidationPipe(updateCategoriaSchema))
     { id, nome }: UpdateCategoria,

@@ -8,15 +8,15 @@ import {
   Put,
   Query,
   UseGuards,
-  //UseInterceptors,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { PostagemService } from '../services/postagem.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-//import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
 
 const createPostagemSchema = z.object({
   titulo: z.string(),
@@ -51,7 +51,7 @@ type CreatePostagem = z.infer<typeof createPostagemSchema>;
 type UpdatePostagem = z.infer<typeof updatePostagemSchema>;
 
 @ApiTags('postagem')
-//@UseInterceptors(LoggingInterceptor)
+@UseInterceptors(LoggingInterceptor)
 @Controller('postagem')
 export class PostagemController {
   constructor(private readonly service: PostagemService) {}
@@ -73,6 +73,24 @@ export class PostagemController {
   @UseGuards(AuthGuard)
   @UsePipes(new ZodValidationPipe(createPostagemSchema))
   @Post()
+  @ApiBody({
+    schema: {
+      properties: {
+        titulo: { type: 'string' },
+        descricao: { type: 'string' },
+        imagemUrl: { type: 'string' },
+        categorias: {
+          type: 'array',
+          items: {
+            properties: {
+              id: { type: 'number' },
+              nome: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+  })
   async create(
     @Body()
     { titulo, descricao, imagemUrl, categorias }: CreatePostagem,
@@ -81,13 +99,32 @@ export class PostagemController {
       titulo,
       descricao,
       imagemUrl,
-      categorias: categorias.map(({ id, nome }) => ({ id, nome })),
+      categorias: categorias?.map(({ id, nome }) => ({ id, nome })),
     });
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Put()
+  @ApiBody({
+    schema: {
+      properties: {
+        id: { type: 'string' },
+        titulo: { type: 'string' },
+        descricao: { type: 'string' },
+        imagemUrl: { type: 'string' },
+        categorias: {
+          type: 'array',
+          items: {
+            properties: {
+              id: { type: 'number' },
+              nome: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+  })
   async update(
     @Body(new ZodValidationPipe(updatePostagemSchema))
     { id, titulo, descricao, imagemUrl, categorias }: UpdatePostagem,
@@ -97,7 +134,7 @@ export class PostagemController {
       titulo,
       descricao,
       imagemUrl,
-      categorias: categorias.map(({ id, nome }) => ({ id, nome })),
+      categorias: categorias?.map(({ id, nome }) => ({ id, nome })),
     });
   }
 
