@@ -7,14 +7,14 @@ import {
   Post,
   Put,
   Query,
-  //UseGuards,
+  UseGuards,
   //UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { CategoriaService } from '../services/categoria.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
-//import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 //import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
 
@@ -50,7 +50,7 @@ export class CategoriaController {
   }
 
   @ApiBearerAuth()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @UsePipes(new ZodValidationPipe(createCategoriaSchema))
   @Post()
   async create(@Body() { nome }: CreateCategoria) {
@@ -58,7 +58,7 @@ export class CategoriaController {
   }
 
   @ApiBearerAuth()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Put()
   async update(
     @Body(new ZodValidationPipe(updateCategoriaSchema))
@@ -68,7 +68,7 @@ export class CategoriaController {
   }
 
   @ApiBearerAuth()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: number) {
     return this.service.delete(id);
