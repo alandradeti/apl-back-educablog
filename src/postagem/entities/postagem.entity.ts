@@ -36,6 +36,24 @@ export class Postagem implements IPostagem {
   })
   imagemUrl: string;
 
+  @Column({
+    name: 'data_criacao',
+    type: 'timestamp without time zone',
+  })
+  dataCriacao: Date;
+
+  @Column({
+    name: 'data_atualizacao',
+    type: 'timestamp without time zone',
+  })
+  dataAtualizacao: Date;
+
+  @Column({
+    name: 'ativo',
+    type: 'boolean',
+  })
+  ativo?: boolean;
+
   @ManyToMany(() => Categoria, {
     cascade: true,
   })

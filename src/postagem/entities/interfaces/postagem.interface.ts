@@ -5,5 +5,8 @@ export interface IPostagem {
   titulo: string;
   descricao: string;
   imagemUrl: string;
+  dataCriacao?: Date;
+  dataAtualizacao: Date;
+  ativo?: boolean;
   categorias?: ICategoria[];
 }

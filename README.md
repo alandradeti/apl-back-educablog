@@ -87,6 +87,9 @@ create table postagem
   ,titulo varchar(100) not null 
   ,descricao varchar(1000) not null
   ,imagem_url varchar(255) not null default ''
+  ,data_postagem_criacao timestamp without time zone default now()
+	,data_postagem_atualizacao timestamp without time zone default now()
+	,ativo boolean not null default true
 );
 
 create table categoria
