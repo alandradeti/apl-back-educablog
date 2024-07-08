@@ -81,7 +81,7 @@ export class PessoaController {
         cpf: { type: 'string' },
         nome: { type: 'string' },
         email: { type: 'string' },
-        dataNascimento: { type: 'date' },
+        dataNascimento: { type: 'string', format: 'date' },
         telefone: { type: 'string' },
         usuario: {
           properties: {
@@ -122,7 +122,7 @@ export class PessoaController {
         cpf: { type: 'string' },
         nome: { type: 'string' },
         email: { type: 'string' },
-        dataNascimento: { type: 'date' },
+        dataNascimento: { type: 'string', format: 'date' },
         telefone: { type: 'string' },
         usuario: {
           properties: {
