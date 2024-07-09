@@ -16,7 +16,7 @@ export class CategoriaPgRepository implements CategoriaRepository {
     });
   }
 
-  async findById(id: number): Promise<ICategoria | null> {
+  async findById(id: string): Promise<ICategoria | null> {
     return await this.repository.findOne({
       where: { id },
     });
@@ -30,7 +30,7 @@ export class CategoriaPgRepository implements CategoriaRepository {
     return await this.repository.save(categoria);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.repository.delete(id);
   }
 }

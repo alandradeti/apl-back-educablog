@@ -38,7 +38,7 @@ export class UsuarioService {
   async create(usuario: IUsuario): Promise<void> {
     const senhaCriptografada = await hash(usuario.senha, 8);
 
-    usuario = { login: usuario.login, senha: senhaCriptografada };
+    usuario.senha = senhaCriptografada;
 
     await this.repository.create(usuario);
   }
@@ -46,7 +46,7 @@ export class UsuarioService {
   async update(usuario: IUsuario): Promise<void> {
     const senhaCriptografada = await hash(usuario.senha, 8);
 
-    usuario = { login: usuario.login, senha: senhaCriptografada };
+    usuario.senha = senhaCriptografada;
 
     await this.repository.update(usuario);
   }

@@ -8,5 +8,5 @@ export interface IPostagem {
   dataCriacao?: Date;
   dataAtualizacao: Date;
   ativo?: boolean;
-  categorias?: ICategoria[];
+  categoria?: ICategoria;
 }

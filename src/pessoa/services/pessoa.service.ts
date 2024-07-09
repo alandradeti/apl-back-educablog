@@ -1,8 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PessoaRepository } from '../repositories/pessoa.repository';
 import { IPessoa } from '../entities/interfaces/pessoa.interface';
-import { hash } from 'bcryptjs';
-
 @Injectable()
 export class PessoaService {
   constructor(private readonly repository: PessoaRepository) {}
@@ -18,22 +16,10 @@ export class PessoaService {
   }
 
   async create(pessoa: IPessoa): Promise<IPessoa> {
-    const senhaCriptografada = await hash(pessoa.usuario.senha, 8);
-
-    console.log(senhaCriptografada);
-
-    pessoa.usuario = { login: pessoa.usuario.login, senha: senhaCriptografada };
-
-    console.log(pessoa);
-
     return await this.repository.create(pessoa);
   }
 
   async update(pessoa: IPessoa): Promise<IPessoa> {
-    const senhaCriptografada = await hash(pessoa.usuario.senha, 8);
-
-    pessoa.usuario = { login: pessoa.usuario.login, senha: senhaCriptografada };
-
     return await this.repository.update(pessoa);
   }
 

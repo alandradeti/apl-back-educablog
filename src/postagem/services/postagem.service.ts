@@ -10,6 +10,23 @@ export class PostagemService {
     return this.repository.findAll(limit, page);
   }
 
+  async findAllPostagemCategoria(
+    limit: number,
+    page: number,
+    idCategoria: string,
+  ): Promise<IPostagem[]> {
+    const postagem = await this.repository.findAllPostagemCategoria(
+      limit,
+      page,
+      idCategoria,
+    );
+    if (!postagem)
+      throw new NotFoundException(
+        'Postagem não encontrada com a categoria informada!',
+      );
+    return postagem;
+  }
+
   async findById(id: string): Promise<IPostagem> {
     const postagem = await this.repository.findById(id);
     if (!postagem) throw new NotFoundException('Postagem não encontrada!');
