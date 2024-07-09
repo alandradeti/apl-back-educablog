@@ -23,13 +23,11 @@ const createPostagemSchema = z.object({
   descricao: z.string(),
   imagemUrl: z.string(),
   ativo: z.boolean().optional(),
-  categorias: z
-    .array(
-      z.object({
-        id: z.coerce.number().optional(),
-        nome: z.string(),
-      }),
-    )
+  categoria: z
+    .object({
+      id: z.string().uuid().optional(),
+      nome: z.string(),
+    })
     .optional(),
 });
 
@@ -39,13 +37,11 @@ const updatePostagemSchema = z.object({
   descricao: z.string(),
   imagemUrl: z.string(),
   ativo: z.boolean().optional(),
-  categorias: z
-    .array(
-      z.object({
-        id: z.coerce.number().optional(),
-        nome: z.string(),
-      }),
-    )
+  categoria: z
+    .object({
+      id: z.string().uuid().optional(),
+      nome: z.string(),
+    })
     .optional(),
 });
 
@@ -66,6 +62,15 @@ export class PostagemController {
     return this.service.findAll(limite, pagina);
   }
 
+  @Get('postagem-categoria')
+  async findAllCategoriaPostagem(
+    @Query('limite') limite: number,
+    @Query('pagina') pagina: number,
+    @Query('idCategoria') idCategoria: string,
+  ) {
+    return this.service.findAllPostagemCategoria(limite, pagina, idCategoria);
+  }
+
   @Get(':id')
   async findById(@Param('id') id: string) {
     return this.service.findById(id);
@@ -82,13 +87,10 @@ export class PostagemController {
         descricao: { type: 'string' },
         imagemUrl: { type: 'string' },
         ativo: { type: 'boolean', default: true },
-        categorias: {
-          type: 'array',
-          items: {
-            properties: {
-              id: { type: 'number' },
-              nome: { type: 'string' },
-            },
+        categoria: {
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            nome: { type: 'string' },
           },
         },
       },
@@ -96,7 +98,7 @@ export class PostagemController {
   })
   async create(
     @Body()
-    { titulo, descricao, imagemUrl, ativo, categorias }: CreatePostagem,
+    { titulo, descricao, imagemUrl, ativo, categoria }: CreatePostagem,
   ) {
     return this.service.create({
       titulo,
@@ -105,7 +107,9 @@ export class PostagemController {
       dataCriacao: new Date(),
       dataAtualizacao: new Date(),
       ativo: ativo ?? true,
-      categorias: categorias?.map(({ id, nome }) => ({ id, nome })),
+      categoria: categoria
+        ? { id: categoria.id, nome: categoria.nome }
+        : undefined,
     });
   }
 
@@ -120,13 +124,10 @@ export class PostagemController {
         descricao: { type: 'string' },
         imagemUrl: { type: 'string' },
         ativo: { type: 'boolean', default: true },
-        categorias: {
-          type: 'array',
-          items: {
-            properties: {
-              id: { type: 'number' },
-              nome: { type: 'string' },
-            },
+        categoria: {
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            nome: { type: 'string' },
           },
         },
       },
@@ -134,7 +135,7 @@ export class PostagemController {
   })
   async update(
     @Body(new ZodValidationPipe(updatePostagemSchema))
-    { id, titulo, descricao, imagemUrl, ativo, categorias }: UpdatePostagem,
+    { id, titulo, descricao, imagemUrl, ativo, categoria }: UpdatePostagem,
   ) {
     return this.service.update({
       id,
@@ -143,7 +144,9 @@ export class PostagemController {
       imagemUrl,
       dataAtualizacao: new Date(),
       ativo,
-      categorias: categorias?.map(({ id, nome }) => ({ id, nome })),
+      categoria: categoria
+        ? { id: categoria.id, nome: categoria.nome }
+        : undefined,
     });
   }
 

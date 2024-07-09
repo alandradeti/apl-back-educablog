@@ -11,7 +11,20 @@ export class PostagemPgRepository implements PostagemRepository {
 
   async findAll(pagina: number, limite: number): Promise<IPostagem[] | null> {
     return this.repository.find({
-      relations: ['categorias'],
+      relations: ['categoria'],
+      skip: (pagina - 1) * limite,
+      take: limite,
+    });
+  }
+
+  async findAllPostagemCategoria(
+    pagina: number,
+    limite: number,
+    idCategoria: string,
+  ): Promise<IPostagem[]> {
+    return this.repository.find({
+      relations: ['categoria'],
+      where: { categoria: { id: idCategoria } },
       skip: (pagina - 1) * limite,
       take: limite,
     });
@@ -19,7 +32,7 @@ export class PostagemPgRepository implements PostagemRepository {
 
   async findById(id: string): Promise<IPostagem | null> {
     return await this.repository.findOne({
-      relations: ['categorias'],
+      relations: ['categoria'],
       where: { id },
     });
   }
