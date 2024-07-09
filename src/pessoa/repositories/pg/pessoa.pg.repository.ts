@@ -11,7 +11,6 @@ export class PessoaPgRepository implements PessoaRepository {
 
   async findAll(pagina: number, limite: number): Promise<IPessoa[] | null> {
     return this.repository.find({
-      relations: ['usuario'],
       skip: (pagina - 1) * limite,
       take: limite,
     });
@@ -19,7 +18,6 @@ export class PessoaPgRepository implements PessoaRepository {
 
   async findById(id: string): Promise<IPessoa | null> {
     return await this.repository.findOne({
-      relations: ['usuario'],
       where: { id },
     });
   }

@@ -24,13 +24,6 @@ const createPessoaSchema = z.object({
   email: z.string().email(),
   dataNascimento: z.coerce.date(),
   telefone: z.string(),
-  usuario: z
-    .object({
-      id: z.string().uuid().optional(),
-      login: z.string(),
-      senha: z.string(),
-    })
-    .optional(),
 });
 
 const updatePessoaSchema = z.object({
@@ -40,13 +33,6 @@ const updatePessoaSchema = z.object({
   email: z.string().email(),
   dataNascimento: z.coerce.date(),
   telefone: z.string(),
-  usuario: z
-    .object({
-      id: z.string().uuid().optional(),
-      login: z.string(),
-      senha: z.string(),
-    })
-    .optional(),
 });
 
 type CreatePessoa = z.infer<typeof createPessoaSchema>;
@@ -71,8 +57,8 @@ export class PessoaController {
     return this.service.findById(id);
   }
 
-  //@ApiBearerAuth()
-  //@UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @UsePipes(new ZodValidationPipe(createPessoaSchema))
   @Post()
   @ApiBody({
@@ -80,23 +66,15 @@ export class PessoaController {
       properties: {
         cpf: { type: 'string' },
         nome: { type: 'string' },
-        email: { type: 'string' },
+        email: { type: 'string', format: 'email' },
         dataNascimento: { type: 'string', format: 'date' },
         telefone: { type: 'string' },
-        usuario: {
-          properties: {
-            id: { type: 'string' },
-            login: { type: 'string' },
-            senha: { type: 'string' },
-          },
-          type: 'object',
-        },
       },
     },
   })
   async create(
     @Body()
-    { cpf, nome, email, dataNascimento, telefone, usuario }: CreatePessoa,
+    { cpf, nome, email, dataNascimento, telefone }: CreatePessoa,
   ) {
     return this.service.create({
       cpf,
@@ -104,11 +82,6 @@ export class PessoaController {
       email,
       dataNascimento,
       telefone,
-      usuario: {
-        id: usuario?.id,
-        login: usuario?.login,
-        senha: usuario?.senha,
-      },
     });
   }
 
@@ -118,26 +91,18 @@ export class PessoaController {
   @ApiBody({
     schema: {
       properties: {
-        id: { type: 'string' },
-        cpf: { type: 'string' },
+        id: { type: 'string', format: 'uuid' },
+        cpf: { type: 'string', format: 'cpf' },
         nome: { type: 'string' },
-        email: { type: 'string' },
+        email: { type: 'string', format: 'email' },
         dataNascimento: { type: 'string', format: 'date' },
-        telefone: { type: 'string' },
-        usuario: {
-          properties: {
-            id: { type: 'string' },
-            login: { type: 'string' },
-            senha: { type: 'string' },
-          },
-          type: 'object',
-        },
+        telefone: { type: 'string', format: 'phone' },
       },
     },
   })
   async update(
     @Body(new ZodValidationPipe(updatePessoaSchema))
-    { id, cpf, nome, email, dataNascimento, telefone, usuario }: UpdatePessoa,
+    { id, cpf, nome, email, dataNascimento, telefone }: UpdatePessoa,
   ) {
     return this.service.update({
       id,
@@ -146,11 +111,6 @@ export class PessoaController {
       email,
       dataNascimento,
       telefone,
-      usuario: {
-        id: usuario?.id,
-        login: usuario.login,
-        senha: usuario.senha,
-      },
     });
   }
 

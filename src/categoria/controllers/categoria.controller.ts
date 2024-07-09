@@ -23,7 +23,7 @@ const createCategoriaSchema = z.object({
 });
 
 const updateCategoriaSchema = z.object({
-  id: z.coerce.number().optional(),
+  id: z.string().uuid().optional(),
   nome: z.string(),
 });
 
@@ -45,7 +45,7 @@ export class CategoriaController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: number) {
+  async findById(@Param('id') id: string) {
     return this.service.findById(id);
   }
 
@@ -70,7 +70,7 @@ export class CategoriaController {
   @ApiBody({
     schema: {
       properties: {
-        id: { type: 'number' },
+        id: { type: 'string', format: 'uuid' },
         nome: { type: 'string' },
       },
     },
@@ -85,7 +85,7 @@ export class CategoriaController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Delete(':id')
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id') id: string) {
     return this.service.delete(id);
   }
 }

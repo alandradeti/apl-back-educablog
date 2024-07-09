@@ -3,8 +3,8 @@ import { IPostagem } from './interfaces/postagem.interface';
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ICategoria } from 'src/categoria/entities/interfaces/categoria.interface';
@@ -54,19 +54,12 @@ export class Postagem implements IPostagem {
   })
   ativo?: boolean;
 
-  @ManyToMany(() => Categoria, {
+  @ManyToOne(() => Categoria, (categoria) => categoria.postagens, {
     cascade: true,
   })
-  @JoinTable({
-    name: 'postagem_categoria',
-    joinColumn: {
-      name: 'id_postagem',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'id_categoria',
-      referencedColumnName: 'id',
-    },
+  @JoinColumn({
+    name: 'id_categoria',
+    referencedColumnName: 'id',
   })
-  categorias?: ICategoria[] | undefined;
+  categoria?: ICategoria;
 }

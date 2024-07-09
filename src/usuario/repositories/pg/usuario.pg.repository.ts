@@ -17,16 +17,19 @@ export class UsuarioPgRepository implements UsuarioRepository {
 
   async findById(id: string): Promise<IUsuario | null> {
     return await this.repository.findOne({
+      relations: ['pessoa'],
       where: { id },
     });
   }
 
-  async create(usuario: IUsuario): Promise<void> {
-    await this.repository.save(usuario);
+  async create(usuario: IUsuario): Promise<string> {
+    const retornoUsuario = await this.repository.save(usuario);
+    return retornoUsuario.id;
   }
 
-  async update(usuario: IUsuario): Promise<void> {
-    await this.repository.save(usuario);
+  async update(usuario: IUsuario): Promise<string> {
+    const retornoUsuario = await this.repository.save(usuario);
+    return retornoUsuario.id;
   }
 
   async delete(id: string): Promise<void> {
