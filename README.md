@@ -122,7 +122,7 @@ create table usuario
   ,login varchar(10) not null
   ,senha varchar(255) not null
   ,id_pessoa uuid null
-  ,constraint uq_pessoa_id UNIQUE (id_pessoa)
+  ,constraint uq_pessoa_id unique (id_pessoa)
   ,constraint fk_pessoa_id foreign key (id_pessoa) references pessoa(id)
 );
 
