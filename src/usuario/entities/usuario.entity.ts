@@ -4,6 +4,7 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { IUsuario } from './interfaces/usuario.interface';
 import { IPessoa } from 'src/pessoa/entities/interfaces/pessoa.interface';
@@ -21,12 +22,14 @@ export class Usuario implements IUsuario {
   @Column({
     name: 'login',
     type: 'varchar',
+    nullable: false,
   })
   login: string;
 
   @Column({
     name: 'senha',
     type: 'varchar',
+    nullable: false,
   })
   senha: string;
 
@@ -36,6 +39,13 @@ export class Usuario implements IUsuario {
   @JoinColumn({
     name: 'id_pessoa',
     referencedColumnName: 'id',
+    foreignKeyConstraintName: 'fk_pessoa_id',
   })
+  @Column({
+    name: 'id_pessoa',
+    type: 'uuid',
+    nullable: true,
+  })
+  @Unique('uq_pessoa_id', ['id_pessoa'])
   pessoa?: IPessoa | undefined;
 }
