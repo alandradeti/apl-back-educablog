@@ -13,30 +13,35 @@ export class Pessoa implements IPessoa {
   @Column({
     name: 'cpf',
     type: 'varchar',
+    nullable: false,
   })
   cpf: string;
 
   @Column({
     name: 'nome',
     type: 'varchar',
+    nullable: false,
   })
   nome: string;
 
   @Column({
     name: 'email',
     type: 'varchar',
+    nullable: false,
   })
   email: string;
 
   @Column({
     name: 'data_nascimento',
     type: 'date',
+    nullable: false,
   })
   dataNascimento: Date;
 
   @Column({
     name: 'telefone',
     type: 'varchar',
+    nullable: false,
   })
   telefone: string;
 }

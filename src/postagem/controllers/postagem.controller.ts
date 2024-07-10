@@ -107,9 +107,7 @@ export class PostagemController {
       dataCriacao: new Date(),
       dataAtualizacao: new Date(),
       ativo: ativo ?? true,
-      categoria: categoria
-        ? { id: categoria.id, nome: categoria.nome }
-        : undefined,
+      categoria: categoria ? { id: categoria.id, nome: categoria.nome } : null,
     });
   }
 
@@ -144,9 +142,7 @@ export class PostagemController {
       imagemUrl,
       dataAtualizacao: new Date(),
       ativo,
-      categoria: categoria
-        ? { id: categoria.id, nome: categoria.nome }
-        : undefined,
+      categoria: categoria ? { id: categoria.id, nome: categoria.nome } : null,
     });
   }
 

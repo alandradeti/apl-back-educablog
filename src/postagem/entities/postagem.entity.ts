@@ -21,36 +21,46 @@ export class Postagem implements IPostagem {
   @Column({
     name: 'titulo',
     type: 'varchar',
+    nullable: false,
   })
   titulo: string;
 
   @Column({
     name: 'descricao',
     type: 'varchar',
+    nullable: false,
   })
   descricao: string;
 
   @Column({
     name: 'imagem_url',
     type: 'varchar',
+    default: '',
+    nullable: false,
   })
   imagemUrl: string;
 
   @Column({
     name: 'data_criacao',
     type: 'timestamp without time zone',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
   })
   dataCriacao: Date;
 
   @Column({
     name: 'data_atualizacao',
     type: 'timestamp without time zone',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
   })
   dataAtualizacao: Date;
 
   @Column({
     name: 'ativo',
     type: 'boolean',
+    default: true,
+    nullable: false,
   })
   ativo?: boolean;
 
@@ -60,6 +70,12 @@ export class Postagem implements IPostagem {
   @JoinColumn({
     name: 'id_categoria',
     referencedColumnName: 'id',
+    foreignKeyConstraintName: 'fk_categoria_id',
+  })
+  @Column({
+    name: 'id_categoria',
+    type: 'uuid',
+    nullable: true,
   })
   categoria?: ICategoria;
 }

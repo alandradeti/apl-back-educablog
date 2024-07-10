@@ -100,7 +100,7 @@ export class UsuarioController {
             dataNascimento: pessoa.dataNascimento,
             telefone: pessoa.telefone,
           }
-        : undefined,
+        : null,
     });
   }
 
@@ -143,7 +143,7 @@ export class UsuarioController {
             dataNascimento: pessoa.dataNascimento,
             telefone: pessoa.telefone,
           }
-        : undefined,
+        : null,
     });
   }
   @ApiBearerAuth()

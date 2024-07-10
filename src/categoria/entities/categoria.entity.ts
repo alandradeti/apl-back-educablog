@@ -20,6 +20,7 @@ export class Categoria implements ICategoria {
   @Column({
     name: 'nome',
     type: 'varchar',
+    nullable: false,
   })
   nome: string;
 

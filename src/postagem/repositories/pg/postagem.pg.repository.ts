@@ -42,6 +42,7 @@ export class PostagemPgRepository implements PostagemRepository {
   }
 
   async update(postagem: IPostagem): Promise<IPostagem | null> {
+    console.log(postagem);
     return await this.repository.save(postagem);
   }
 
