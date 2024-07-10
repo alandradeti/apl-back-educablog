@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ICategoria } from './interfaces/categoria.interface';
-import { Postagem } from 'src/postagem/entities/postagem.entity';
+import { Post } from 'src/post/entities/post.entity';
 
 @Entity({
   name: 'categoria',
@@ -24,7 +24,7 @@ export class Categoria implements ICategoria {
   })
   nome: string;
 
-  @OneToMany(() => Postagem, (postagem) => postagem.categoria)
+  @OneToMany(() => Post, (post) => post.categoria)
   @JoinColumn({ name: 'id', referencedColumnName: 'id_categoria' })
-  postagens?: Postagem[];
+  postagens?: Post[];
 }

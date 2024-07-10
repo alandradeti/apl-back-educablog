@@ -11,14 +11,14 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { PostagemService } from '../services/postagem.service';
+import { PostService } from '../services/post.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
 
-const createPostagemSchema = z.object({
+const createPostSchema = z.object({
   titulo: z.string(),
   descricao: z.string(),
   imagemUrl: z.string(),
@@ -31,7 +31,7 @@ const createPostagemSchema = z.object({
     .optional(),
 });
 
-const updatePostagemSchema = z.object({
+const updatePostSchema = z.object({
   id: z.string().uuid(),
   titulo: z.string(),
   descricao: z.string(),
@@ -45,14 +45,14 @@ const updatePostagemSchema = z.object({
     .optional(),
 });
 
-type CreatePostagem = z.infer<typeof createPostagemSchema>;
-type UpdatePostagem = z.infer<typeof updatePostagemSchema>;
+type CreatePost = z.infer<typeof createPostSchema>;
+type UpdatePost = z.infer<typeof updatePostSchema>;
 
-@ApiTags('postagem')
+@ApiTags('posts')
 @UseInterceptors(LoggingInterceptor)
-@Controller('postagem')
-export class PostagemController {
-  constructor(private readonly service: PostagemService) {}
+@Controller('posts')
+export class PostController {
+  constructor(private readonly service: PostService) {}
 
   @Get()
   async findAll(
@@ -62,13 +62,18 @@ export class PostagemController {
     return this.service.findAll(limite, pagina);
   }
 
-  @Get('postagem-categoria')
-  async findAllCategoriaPostagem(
+  @Get('post-categoria')
+  async findAllCategoriaPost(
     @Query('limite') limite: number,
     @Query('pagina') pagina: number,
     @Query('idCategoria') idCategoria: string,
   ) {
-    return this.service.findAllPostagemCategoria(limite, pagina, idCategoria);
+    return this.service.findAllPostCategoria(limite, pagina, idCategoria);
+  }
+
+  @Get('search')
+  async search(@Query('query') query: string) {
+    return this.service.search(query);
   }
 
   @Get(':id')
@@ -78,7 +83,7 @@ export class PostagemController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @UsePipes(new ZodValidationPipe(createPostagemSchema))
+  @UsePipes(new ZodValidationPipe(createPostSchema))
   @Post()
   @ApiBody({
     schema: {
@@ -98,7 +103,7 @@ export class PostagemController {
   })
   async create(
     @Body()
-    { titulo, descricao, imagemUrl, ativo, categoria }: CreatePostagem,
+    { titulo, descricao, imagemUrl, ativo, categoria }: CreatePost,
   ) {
     return this.service.create({
       titulo,
@@ -132,8 +137,8 @@ export class PostagemController {
     },
   })
   async update(
-    @Body(new ZodValidationPipe(updatePostagemSchema))
-    { id, titulo, descricao, imagemUrl, ativo, categoria }: UpdatePostagem,
+    @Body(new ZodValidationPipe(updatePostSchema))
+    { id, titulo, descricao, imagemUrl, ativo, categoria }: UpdatePost,
   ) {
     return this.service.update({
       id,

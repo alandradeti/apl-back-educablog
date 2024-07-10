@@ -82,7 +82,7 @@ Nest is [MIT licensed](LICENSE).
 ## Script DB
 
 ```sql 
-drop table if exists postagem;
+drop table if exists post;
 drop table if exists categoria;
 drop table if exists usuario;
 drop table if exists pessoa;
@@ -93,7 +93,7 @@ create table categoria
   ,nome varchar(100) not null
 );
 
-create table postagem
+create table post
 (
   id uuid primary key default uuid_generate_v4() 
   ,titulo varchar(100) not null 
