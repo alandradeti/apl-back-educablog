@@ -77,5 +77,5 @@ export class Postagem implements IPostagem {
     type: 'uuid',
     nullable: true,
   })
-  categoria?: ICategoria;
+  categoria?: ICategoria | undefined;
 }
