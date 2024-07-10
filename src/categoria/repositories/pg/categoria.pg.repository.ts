@@ -9,9 +9,11 @@ export class CategoriaPgRepository implements CategoriaRepository {
     @InjectRepository(Categoria) private repository: Repository<Categoria>,
   ) {}
 
-  async findAll(pagina: number, limite: number): Promise<ICategoria[]> {
+  async findAll(limite: number, pagina: number): Promise<ICategoria[]> {
+    const maxLimite = Math.min(limite, 50);
+
     return this.repository.find({
-      skip: (pagina - 1) * limite,
+      skip: (pagina - 1) * maxLimite,
       take: limite,
     });
   }

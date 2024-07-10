@@ -9,9 +9,11 @@ export class PessoaPgRepository implements PessoaRepository {
     @InjectRepository(Pessoa) private repository: Repository<Pessoa>,
   ) {}
 
-  async findAll(pagina: number, limite: number): Promise<IPessoa[] | null> {
+  async findAll(limite: number, pagina: number): Promise<IPessoa[] | null> {
+    const maxLimite = Math.min(limite, 50);
+
     return this.repository.find({
-      skip: (pagina - 1) * limite,
+      skip: (pagina - 1) * maxLimite,
       take: limite,
     });
   }
