@@ -1,0 +1,61 @@
+services:
+  - name: app
+    type: web
+    env: docker
+    dockerfilePath: ./Dockerfile
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: DATABASE_URL
+        fromService:
+          name: postgres
+          type: postgres
+          property: connectionString
+    ports:
+      - port: 3010
+
+  - name: postgres
+    type: postgres
+    plan: starter
+    version: 13
+    disk:
+      sizeGB: 10
+    envVars:
+      - key: POSTGRES_USER
+        value: ${USER_DATABASE}
+      - key: POSTGRES_PASSWORD
+        value: ${PASS_DATABASE}
+      - key: POSTGRES_DB
+        value: ${NAME_DATABASE}
+
+  - name: prometheus
+    type: web
+    env: docker
+    dockerfilePath: ./Dockerfile
+    buildCommand: ""
+    startCommand: "--config.file=/etc/prometheus/prometheus.yml"
+    mounts:
+      - path: /etc/prometheus/prometheus.yml
+        volume:
+          name: prometheus-config
+    ports:
+      - port: 9090
+
+  - name: grafana
+    type: web
+    env: docker
+    dockerfilePath: ./Dockerfile
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: GF_SECURITY_ADMIN_PASSWORD
+        value: ${GRAFANA_ADMIN_PASSWORD}
+    ports:
+      - port: 3000
+    dependencies:
+      - name: prometheus
+
+volumes:
+  - name: prometheus-config
+    type: file
+    file: ./prometheus.yml
