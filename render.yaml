@@ -14,20 +14,6 @@ services:
     ports:
       - port: 3010
 
-  - name: postgres
-    type: postgres
-    plan: starter
-    version: 13
-    disk:
-      sizeGB: 10
-    envVars:
-      - key: POSTGRES_USER
-        value: ${USER_DATABASE}
-      - key: POSTGRES_PASSWORD
-        value: ${PASS_DATABASE}
-      - key: POSTGRES_DB
-        value: ${NAME_DATABASE}
-
   - name: prometheus
     type: web
     env: docker
