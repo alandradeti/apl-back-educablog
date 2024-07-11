@@ -5,29 +5,24 @@ import { Repository } from 'typeorm';
 import { PostRepository } from '../post.repository';
 
 export class PostPgRepository implements PostRepository {
-  constructor(
-    @InjectRepository(Post) private repository: Repository<Post>,
-  ) {}
+  constructor(@InjectRepository(Post) private repository: Repository<Post>) {}
 
   async findAll(limite: number, pagina: number): Promise<IPost[] | null> {
     const maxLimite = Math.min(limite, 50);
 
     return this.repository.find({
       relations: ['categoria'],
-      where: { ativo: true },
       skip: (pagina - 1) * maxLimite,
       take: limite,
     });
   }
 
-  async findAllAdmin(
-    limite: number,
-    pagina: number,
-  ): Promise<IPost[] | null> {
+  async findAllActive(limite: number, pagina: number): Promise<IPost[] | null> {
     const maxLimite = Math.min(limite, 50);
 
     return this.repository.find({
       relations: ['categoria'],
+      where: { ativo: true },
       skip: (pagina - 1) * maxLimite,
       take: limite,
     });

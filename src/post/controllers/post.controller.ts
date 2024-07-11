@@ -55,6 +55,16 @@ export class PostController {
   constructor(private readonly service: PostService) {}
 
   @Get()
+  async findAllActive(
+    @Query('limite') limite: number = 10,
+    @Query('pagina') pagina: number = 1,
+  ) {
+    return this.service.findAllActive(limite, pagina);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('admin')
   async findAll(
     @Query('limite') limite: number = 10,
     @Query('pagina') pagina: number = 1,

@@ -2,6 +2,10 @@ import { IPost } from '../entities/interfaces/post.interface';
 
 export abstract class PostRepository {
   abstract findAll(limite: number, pagina: number): Promise<IPost[] | null>;
+  abstract findAllActive(
+    limite: number,
+    pagina: number,
+  ): Promise<IPost[] | null>;
   abstract findAllPostCategoria(
     limite: number,
     pagina: number,

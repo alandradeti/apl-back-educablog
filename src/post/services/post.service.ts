@@ -10,6 +10,10 @@ export class PostService {
     return this.repository.findAll(limit, page);
   }
 
+  async findAllActive(limit: number, page: number): Promise<IPost[]> {
+    return this.repository.findAllActive(limit, page);
+  }
+
   async findAllPostCategoria(
     limit: number,
     page: number,

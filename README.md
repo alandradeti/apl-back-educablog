@@ -119,7 +119,7 @@ create table pessoa
 create table usuario
 (
   id uuid primary key default uuid_generate_v4() 
-  ,login varchar(10) not null
+  ,login varchar(255) not null
   ,senha varchar(255) not null
   ,id_pessoa uuid null
   ,constraint uq_pessoa_id unique (id_pessoa)
