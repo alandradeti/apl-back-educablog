@@ -56,8 +56,8 @@ export class PostagemController {
 
   @Get()
   async findAll(
-    @Query('limite') limite: number,
-    @Query('pagina') pagina: number,
+    @Query('limite') limite: number = 10,
+    @Query('pagina') pagina: number = 1,
   ) {
     return this.service.findAll(limite, pagina);
   }
@@ -107,9 +107,7 @@ export class PostagemController {
       dataCriacao: new Date(),
       dataAtualizacao: new Date(),
       ativo: ativo ?? true,
-      categoria: categoria
-        ? { id: categoria.id, nome: categoria.nome }
-        : undefined,
+      categoria: categoria ? { id: categoria.id, nome: categoria.nome } : null,
     });
   }
 
@@ -144,9 +142,7 @@ export class PostagemController {
       imagemUrl,
       dataAtualizacao: new Date(),
       ativo,
-      categoria: categoria
-        ? { id: categoria.id, nome: categoria.nome }
-        : undefined,
+      categoria: categoria ? { id: categoria.id, nome: categoria.nome } : null,
     });
   }
 

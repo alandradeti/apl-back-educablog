@@ -46,8 +46,8 @@ export class PessoaController {
 
   @Get()
   async findAll(
-    @Query('limite') limite: number,
-    @Query('pagina') pagina: number,
+    @Query('limite') limite: number = 10,
+    @Query('pagina') pagina: number = 1,
   ) {
     return this.service.findAll(limite, pagina);
   }
