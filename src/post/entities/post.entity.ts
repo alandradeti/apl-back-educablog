@@ -1,5 +1,5 @@
 import { Categoria } from 'src/categoria/entities/categoria.entity';
-import { IPostagem } from './interfaces/postagem.interface';
+import { IPost } from './interfaces/post.interface';
 import {
   Column,
   Entity,
@@ -10,9 +10,9 @@ import {
 import { ICategoria } from 'src/categoria/entities/interfaces/categoria.interface';
 
 @Entity({
-  name: 'postagem',
+  name: 'post',
 })
-export class Postagem implements IPostagem {
+export class Post implements IPost {
   @PrimaryGeneratedColumn('uuid', {
     name: 'id',
   })

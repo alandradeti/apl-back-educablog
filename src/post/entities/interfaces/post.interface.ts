@@ -1,6 +1,6 @@
 import { ICategoria } from 'src/categoria/entities/interfaces/categoria.interface';
 
-export interface IPostagem {
+export interface IPost {
   id?: string;
   titulo: string;
   descricao: string;
