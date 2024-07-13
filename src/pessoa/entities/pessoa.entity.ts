@@ -14,6 +14,7 @@ export class Pessoa implements IPessoa {
     name: 'cpf',
     type: 'varchar',
     nullable: false,
+    unique: true,
   })
   cpf: string;
 

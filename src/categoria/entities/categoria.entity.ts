@@ -21,6 +21,7 @@ export class Categoria implements ICategoria {
     name: 'nome',
     type: 'varchar',
     nullable: false,
+    unique: true,
   })
   nome: string;
 

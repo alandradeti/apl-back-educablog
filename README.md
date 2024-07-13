@@ -91,6 +91,7 @@ create table categoria
 (
   id uuid primary key default uuid_generate_v4() 
   ,nome varchar(100) not null
+  ,constraint uq_nome unique (nome)
 );
 
 create table post
@@ -114,6 +115,7 @@ create table pessoa
   ,email varchar(255) not null
   ,data_nascimento date not null
   ,telefone varchar(20) not null
+  ,constraint uq_cpf unique (cpf)
 );
 
 create table usuario
@@ -122,6 +124,7 @@ create table usuario
   ,login varchar(255) not null
   ,senha varchar(255) not null
   ,id_pessoa uuid null
+  ,constraint uq_login unique (login)
   ,constraint uq_pessoa_id unique (id_pessoa)
   ,constraint fk_pessoa_id foreign key (id_pessoa) references pessoa(id)
 );

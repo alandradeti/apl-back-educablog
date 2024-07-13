@@ -23,6 +23,7 @@ export class Usuario implements IUsuario {
     name: 'login',
     type: 'varchar',
     nullable: false,
+    unique: true,
   })
   login: string;
 
@@ -45,6 +46,7 @@ export class Usuario implements IUsuario {
     name: 'id_pessoa',
     type: 'uuid',
     nullable: true,
+    unique: true,
   })
   @Unique('uq_pessoa_id', ['id_pessoa'])
   pessoa?: IPessoa | undefined;
