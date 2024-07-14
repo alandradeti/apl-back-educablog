@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   Unique,
@@ -9,6 +10,7 @@ import {
 import { IUsuario } from './interfaces/usuario.interface';
 import { IPessoa } from 'src/pessoa/entities/interfaces/pessoa.interface';
 import { Pessoa } from 'src/pessoa/entities/pessoa.entity';
+import { Post } from 'src/post/entities/post.entity';
 
 @Entity({
   name: 'usuario',
@@ -50,4 +52,12 @@ export class Usuario implements IUsuario {
   })
   @Unique('uq_pessoa_id', ['id_pessoa'])
   pessoa?: IPessoa | undefined;
+
+  @OneToMany(() => Post, (post) => post.usuarioCriacao)
+  @JoinColumn({ name: 'id', referencedColumnName: 'id_usuario_criacao' })
+  postsCriados?: Post[];
+
+  @OneToMany(() => Post, (post) => post.usuarioCriacao)
+  @JoinColumn({ name: 'id', referencedColumnName: 'id_usuario_atualizacao' })
+  postsAtualizados?: Post[];
 }

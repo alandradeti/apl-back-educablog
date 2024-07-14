@@ -9,7 +9,7 @@ export abstract class PostRepository {
   abstract findAllPostCategoria(
     limite: number,
     pagina: number,
-    id: string,
+    idCategoria: string,
   ): Promise<IPost[] | null>;
   abstract findById(id: string): Promise<IPost | null>;
   abstract search(query: string): Promise<IPost[] | null>;

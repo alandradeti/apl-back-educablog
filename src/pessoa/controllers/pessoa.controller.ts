@@ -44,6 +44,8 @@ type UpdatePessoa = z.infer<typeof updatePessoaSchema>;
 export class PessoaController {
   constructor(private readonly service: PessoaService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get()
   async findAll(
     @Query('limite') limite: number = 10,
@@ -52,6 +54,8 @@ export class PessoaController {
     return this.service.findAll(limite, pagina);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findById(@Param('id') id: string) {
     return this.service.findById(id);

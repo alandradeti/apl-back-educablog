@@ -10,6 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
   UsePipes,
+  Request,
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
 import { z } from 'zod';
@@ -112,16 +113,19 @@ export class PostController {
     },
   })
   async create(
-    @Body()
+    @Request() req,
+    @Body(new ZodValidationPipe(createPostSchema))
     { titulo, descricao, imagemUrl, ativo, categoria }: CreatePost,
   ) {
     return this.service.create({
       titulo,
       descricao,
       imagemUrl,
-      dataCriacao: new Date(),
-      dataAtualizacao: new Date(),
       ativo: ativo ?? true,
+      usuarioCriacao: req.usuario.id,
+      dataCriacao: new Date(),
+      usuarioAtualizacao: req.usuario.id,
+      dataAtualizacao: new Date(),
       categoria: categoria ? { id: categoria.id, nome: categoria.nome } : null,
     });
   }
@@ -147,6 +151,7 @@ export class PostController {
     },
   })
   async update(
+    @Request() req,
     @Body(new ZodValidationPipe(updatePostSchema))
     { id, titulo, descricao, imagemUrl, ativo, categoria }: UpdatePost,
   ) {
@@ -155,8 +160,9 @@ export class PostController {
       titulo,
       descricao,
       imagemUrl,
-      dataAtualizacao: new Date(),
       ativo,
+      usuarioAtualizacao: req.usuario.id,
+      dataAtualizacao: new Date(),
       categoria: categoria ? { id: categoria.id, nome: categoria.nome } : null,
     });
   }

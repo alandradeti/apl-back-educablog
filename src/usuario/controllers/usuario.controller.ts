@@ -57,6 +57,8 @@ type UpdateUsuario = z.infer<typeof updateUsuarioSchema>;
 export class UsuarioController {
   constructor(private readonly service: UsuarioService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findById(@Param('id') id: string) {
     return this.service.findById(id);
@@ -146,6 +148,7 @@ export class UsuarioController {
         : null,
     });
   }
+
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Delete(':id')

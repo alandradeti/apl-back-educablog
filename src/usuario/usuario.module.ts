@@ -6,7 +6,7 @@ import { UsuarioPgRepository } from './repositories/pg/usuario.pg.repository';
 import { UsuarioService } from './services/usuario.service';
 import { UsuarioController } from './controllers/usuario.controller';
 import { PrometheusService } from 'src/shared/services/prometheus.service';
-import { SigInController } from './controllers/sigin.controller';
+import { AutenticacaoController } from './controllers/autenticacao.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Usuario])],
@@ -18,6 +18,6 @@ import { SigInController } from './controllers/sigin.controller';
     UsuarioService,
     PrometheusService,
   ],
-  controllers: [UsuarioController, SigInController],
+  controllers: [UsuarioController, AutenticacaoController],
 })
 export class UsuarioModule {}

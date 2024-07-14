@@ -8,6 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ICategoria } from 'src/categoria/entities/interfaces/categoria.interface';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
+import { IUsuario } from 'src/usuario/entities/interfaces/usuario.interface';
 
 @Entity({
   name: 'post',
@@ -41,12 +43,40 @@ export class Post implements IPost {
   imagemUrl: string;
 
   @Column({
+    name: 'ativo',
+    type: 'boolean',
+    default: true,
+    nullable: false,
+  })
+  ativo?: boolean;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.postsCriados, {
+    cascade: true,
+  })
+  @JoinColumn({
+    name: 'id_usuario_criacao',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'fk_usuario_criacao_id',
+  })
+  usuarioCriacao?: IUsuario;
+
+  @Column({
     name: 'data_criacao',
     type: 'timestamp without time zone',
     default: () => 'CURRENT_TIMESTAMP',
     nullable: false,
   })
-  dataCriacao: Date;
+  dataCriacao?: Date;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.postsAtualizados, {
+    cascade: true,
+  })
+  @JoinColumn({
+    name: 'id_usuario_atualizacao',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'fk_usuario_atualizacao_id',
+  })
+  usuarioAtualizacao: IUsuario;
 
   @Column({
     name: 'data_atualizacao',
@@ -56,14 +86,6 @@ export class Post implements IPost {
   })
   dataAtualizacao: Date;
 
-  @Column({
-    name: 'ativo',
-    type: 'boolean',
-    default: true,
-    nullable: false,
-  })
-  ativo?: boolean;
-
   @ManyToOne(() => Categoria, (categoria) => categoria.posts, {
     cascade: true,
   })
@@ -71,11 +93,6 @@ export class Post implements IPost {
     name: 'id_categoria',
     referencedColumnName: 'id',
     foreignKeyConstraintName: 'fk_categoria_id',
-  })
-  @Column({
-    name: 'id_categoria',
-    type: 'uuid',
-    nullable: true,
   })
   categoria?: ICategoria | undefined;
 }

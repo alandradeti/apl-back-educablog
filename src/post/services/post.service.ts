@@ -24,25 +24,25 @@ export class PostService {
       page,
       idCategoria,
     );
-    if (!post)
+    if (!post || post.length === 0)
       throw new NotFoundException(
-        'Post não encontrada com a categoria informada!',
+        'Post não encontrado com a categoria informada!',
       );
     return post;
   }
 
   async findById(id: string): Promise<IPost> {
     const post = await this.repository.findById(id);
-    if (!post) throw new NotFoundException('Post não encontrada!');
+    if (!post) throw new NotFoundException('Post não encontrado!');
     return post;
   }
 
   async search(query: string): Promise<IPost[]> {
-    const postagens = await this.repository.search(query);
-    if (!postagens || postagens.length === 0) {
-      throw new NotFoundException('Nenhuma post encontrada para a busca!');
+    const post = await this.repository.search(query);
+    if (!post || post.length === 0) {
+      throw new NotFoundException('Nenhuma post encontrado para a busca!');
     }
-    return postagens;
+    return post;
   }
 
   async create(post: IPost): Promise<IPost> {

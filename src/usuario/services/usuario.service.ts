@@ -24,7 +24,9 @@ export class UsuarioService {
 
     if (!senhaMatch) throw new UnauthorizedException('Credenciais inválidas!');
 
-    const token = await this.jwtService.signAsync({ login });
+    const token = await this.jwtService.signAsync({
+      id: usuario.id,
+    });
 
     return { token };
   }

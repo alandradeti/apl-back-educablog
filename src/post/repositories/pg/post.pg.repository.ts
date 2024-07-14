@@ -11,7 +11,17 @@ export class PostPgRepository implements PostRepository {
     const maxLimite = Math.min(limite, 50);
 
     return this.repository.find({
-      relations: ['categoria'],
+      relations: ['categoria', 'usuarioCriacao', 'usuarioAtualizacao'],
+      select: {
+        usuarioCriacao: {
+          id: true,
+          login: true,
+        },
+        usuarioAtualizacao: {
+          id: true,
+          login: true,
+        },
+      },
       skip: (pagina - 1) * maxLimite,
       take: limite,
     });
@@ -29,27 +39,29 @@ export class PostPgRepository implements PostRepository {
   }
 
   async findAllPostCategoria(
-    pagina: number,
     limite: number,
+    pagina: number,
     idCategoria: string,
   ): Promise<IPost[]> {
+    const maxLimite = Math.min(limite, 50);
+
     return this.repository.find({
       relations: ['categoria'],
       where: { categoria: { id: idCategoria } },
-      skip: (pagina - 1) * limite,
+      skip: (pagina - 1) * maxLimite,
       take: limite,
     });
   }
 
   async findById(id: string): Promise<IPost | null> {
-    return await this.repository.findOne({
+    return this.repository.findOne({
       relations: ['categoria'],
       where: { id },
     });
   }
 
   async search(query: string): Promise<IPost[] | null> {
-    return await this.repository
+    return this.repository
       .createQueryBuilder('post')
       .where('post.ativo = :ativo', { ativo: true })
       .andWhere('post.titulo ILIKE :query', { query: `%${query}%` })
@@ -62,7 +74,6 @@ export class PostPgRepository implements PostRepository {
   }
 
   async update(post: IPost): Promise<IPost | null> {
-    console.log(post);
     return await this.repository.save(post);
   }
 
