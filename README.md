@@ -94,19 +94,6 @@ create table categoria
   ,constraint uq_nome unique (nome)
 );
 
-create table post
-(
-  id uuid primary key default uuid_generate_v4() 
-  ,titulo varchar(100) not null 
-  ,descricao varchar(1000) not null
-  ,imagem_url varchar(1000) not null default ''
-  ,data_criacao timestamp without time zone default now()
-  ,data_atualizacao timestamp without time zone default now()
-  ,ativo boolean not null default true
-  ,id_categoria uuid null
-  ,constraint fk_categoria_id foreign key (id_categoria) references categoria(id)
-);
-
 create table pessoa
 (
   id uuid primary key default uuid_generate_v4() 
@@ -127,6 +114,23 @@ create table usuario
   ,constraint uq_login unique (login)
   ,constraint uq_pessoa_id unique (id_pessoa)
   ,constraint fk_pessoa_id foreign key (id_pessoa) references pessoa(id)
+);
+
+create table post
+(
+  id uuid primary key default uuid_generate_v4() 
+  ,titulo varchar(100) not null 
+  ,descricao varchar(1000) not null
+  ,imagem_url varchar(1000) not null default ''
+  ,ativo boolean not null default true
+  ,id_usuario_criacao uuid not null
+  ,data_criacao timestamp without time zone default now()
+  ,id_usuario_atualizacao uuid not null
+  ,data_atualizacao timestamp without time zone default now()
+  ,id_categoria uuid null
+  ,constraint fk_usuario_criacao_id foreign key (id_usuario_criacao) references usuario(id)
+  ,constraint fk_usuario_atualizacao_id foreign key (id_usuario_atualizacao) references usuario(id)
+  ,constraint fk_categoria_id foreign key (id_categoria) references categoria(id)
 );
 
 create extension if not exists "uuid-ossp"
