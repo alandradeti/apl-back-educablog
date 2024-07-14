@@ -27,5 +27,5 @@ export class Categoria implements ICategoria {
 
   @OneToMany(() => Post, (post) => post.categoria)
   @JoinColumn({ name: 'id', referencedColumnName: 'id_categoria' })
-  postagens?: Post[];
+  posts?: Post[];
 }

@@ -64,7 +64,7 @@ export class Post implements IPost {
   })
   ativo?: boolean;
 
-  @ManyToOne(() => Categoria, (categoria) => categoria.postagens, {
+  @ManyToOne(() => Categoria, (categoria) => categoria.posts, {
     cascade: true,
   })
   @JoinColumn({
