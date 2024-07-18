@@ -11,12 +11,13 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { z } from 'zod';
-import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
-import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { z } from 'zod';
+
+import { AuthGuard } from '../../shared/guards/auth.guard';
+import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
+import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
 import { PessoaService } from '../services/pessoa.service';
-import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
 
 const createPessoaSchema = z.object({
   cpf: z.string(),

@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Pessoa } from 'src/pessoa/entities/pessoa.entity';
+import { Pessoa } from '../../entities/pessoa.entity';
 import { PessoaRepository } from '../pessoa.repository';
 import { IPessoa } from 'src/pessoa/entities/interfaces/pessoa.interface';
 

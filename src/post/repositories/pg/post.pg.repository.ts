@@ -1,6 +1,6 @@
 import { IPost } from 'src/post/entities/interfaces/post.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from 'src/post/entities/post.entity';
+import { Post } from '../../entities/post.entity';
 import { Repository } from 'typeorm';
 import { PostRepository } from '../post.repository';
 

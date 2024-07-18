@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { IPost } from '../entities/interfaces/post.interface';
 import { PostRepository } from '../repositories/post.repository';
 
@@ -38,11 +39,11 @@ export class PostService {
   }
 
   async search(query: string): Promise<IPost[]> {
-    const post = await this.repository.search(query);
-    if (!post || post.length === 0) {
+    const posts = await this.repository.search(query);
+    if (!posts || posts.length === 0) {
       throw new NotFoundException('Nenhuma post encontrado para a busca!');
     }
-    return post;
+    return posts;
   }
 
   async create(post: IPost): Promise<IPost> {

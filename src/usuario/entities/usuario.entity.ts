@@ -9,8 +9,8 @@ import {
 } from 'typeorm';
 import { IUsuario } from './interfaces/usuario.interface';
 import { IPessoa } from 'src/pessoa/entities/interfaces/pessoa.interface';
-import { Pessoa } from 'src/pessoa/entities/pessoa.entity';
-import { Post } from 'src/post/entities/post.entity';
+import { Post } from '../../post/entities/post.entity';
+import { Pessoa } from '../../pessoa/entities/pessoa.entity';
 
 @Entity({
   name: 'usuario',

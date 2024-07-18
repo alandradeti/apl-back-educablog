@@ -11,11 +11,11 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { z } from 'zod';
-import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
-import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
+import { AuthGuard } from '../../shared/guards/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { UsuarioService } from '../services/usuario.service';
-import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
+import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 
 const createUsuarioSchema = z.object({
   login: z.string(),

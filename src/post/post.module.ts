@@ -5,7 +5,7 @@ import { PostPgRepository } from './repositories/pg/post.pg.repository';
 import { PostController } from './controllers/post.controller';
 import { PostService } from './services/post.service';
 import { PostRepository } from './repositories/post.repository';
-import { PrometheusService } from 'src/shared/services/prometheus.service';
+import { PrometheusService } from '../shared/services/prometheus.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Post])],

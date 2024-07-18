@@ -5,7 +5,7 @@ import { UsuarioRepository } from './repositories/usuario.repository';
 import { UsuarioPgRepository } from './repositories/pg/usuario.pg.repository';
 import { UsuarioService } from './services/usuario.service';
 import { UsuarioController } from './controllers/usuario.controller';
-import { PrometheusService } from 'src/shared/services/prometheus.service';
+import { PrometheusService } from '../shared/services/prometheus.service';
 import { AutenticacaoController } from './controllers/autenticacao.controller';
 
 @Module({
