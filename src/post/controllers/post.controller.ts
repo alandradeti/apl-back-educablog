@@ -75,8 +75,8 @@ export class PostController {
 
   @Get('post-categoria')
   async findAllCategoriaPost(
-    @Query('limite') limite: number,
-    @Query('pagina') pagina: number,
+    @Query('limite') limite: number = 10,
+    @Query('pagina') pagina: number = 1,
     @Query('idCategoria') idCategoria: string,
   ) {
     return this.service.findAllPostCategoria(limite, pagina, idCategoria);
