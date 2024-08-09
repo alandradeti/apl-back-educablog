@@ -37,12 +37,12 @@ export class UsuarioService {
     return usuario;
   }
 
-  async create(usuario: IUsuario): Promise<void> {
+  async create(usuario: IUsuario): Promise<string> {
     const senhaCriptografada = await hash(usuario.senha, 8);
 
     usuario.senha = senhaCriptografada;
 
-    await this.repository.create(usuario);
+    return await this.repository.create(usuario);
   }
 
   async update(usuario: IUsuario): Promise<void> {

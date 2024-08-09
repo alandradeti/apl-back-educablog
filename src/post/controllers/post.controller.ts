@@ -14,10 +14,10 @@ import {
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
 import { z } from 'zod';
-import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
-import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
+import { AuthGuard } from '../../shared/guards/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
+import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 
 const createPostSchema = z.object({
   titulo: z.string(),
@@ -29,7 +29,8 @@ const createPostSchema = z.object({
       id: z.string().uuid().optional(),
       nome: z.string(),
     })
-    .optional(),
+    .optional()
+    .nullable(),
 });
 
 const updatePostSchema = z.object({
@@ -43,7 +44,8 @@ const updatePostSchema = z.object({
       id: z.string().uuid().optional(),
       nome: z.string(),
     })
-    .optional(),
+    .optional()
+    .nullable(),
 });
 
 type CreatePost = z.infer<typeof createPostSchema>;
@@ -114,7 +116,7 @@ export class PostController {
   })
   async create(
     @Request() req,
-    @Body(new ZodValidationPipe(createPostSchema))
+    @Body()
     { titulo, descricao, imagemUrl, ativo, categoria }: CreatePost,
   ) {
     return this.service.create({

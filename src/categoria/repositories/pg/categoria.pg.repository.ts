@@ -1,8 +1,9 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import { Categoria } from '../../entities/categoria.entity';
+import { ICategoria } from '../../entities/interfaces/categoria.interface';
 import { CategoriaRepository } from '../categoria.repository';
-import { Categoria } from 'src/categoria/entities/categoria.entity';
-import { ICategoria } from 'src/categoria/entities/interfaces/categoria.interface';
 
 export class CategoriaPgRepository implements CategoriaRepository {
   constructor(

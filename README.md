@@ -81,7 +81,9 @@ Nest is [MIT licensed](LICENSE).
 
 ## Script DB
 
-```sql 
+```sql
+create extension if not exists "uuid-ossp";
+
 drop table if exists post;
 drop table if exists categoria;
 drop table if exists usuario;
@@ -89,14 +91,14 @@ drop table if exists pessoa;
 
 create table categoria
 (
-  id uuid primary key default uuid_generate_v4() 
+  id uuid primary key default uuid_generate_v4()
   ,nome varchar(100) not null
   ,constraint uq_nome unique (nome)
 );
 
 create table pessoa
 (
-  id uuid primary key default uuid_generate_v4() 
+  id uuid primary key default uuid_generate_v4()
   ,cpf varchar(11) not null
   ,nome varchar(255) not null
   ,email varchar(255) not null
@@ -107,7 +109,7 @@ create table pessoa
 
 create table usuario
 (
-  id uuid primary key default uuid_generate_v4() 
+  id uuid primary key default uuid_generate_v4()
   ,login varchar(255) not null
   ,senha varchar(255) not null
   ,id_pessoa uuid null
@@ -118,8 +120,8 @@ create table usuario
 
 create table post
 (
-  id uuid primary key default uuid_generate_v4() 
-  ,titulo varchar(100) not null 
+  id uuid primary key default uuid_generate_v4()
+  ,titulo varchar(100) not null
   ,descricao varchar(1000) not null
   ,imagem_url varchar(1000) not null default ''
   ,ativo boolean not null default true
@@ -133,6 +135,9 @@ create table post
   ,constraint fk_categoria_id foreign key (id_categoria) references categoria(id)
 );
 
-create extension if not exists "uuid-ossp"
+-- Usuário admin para usar na autenticação dos testes
+insert into usuario (login, senha)
+values ('admin', '$2a$08$irmxjBNXz3qco099PIxUo.zKhhLMYlUp5XlHqrL0BFZyAYwWM9OXi');
+
 ```
 <!-- slide -->

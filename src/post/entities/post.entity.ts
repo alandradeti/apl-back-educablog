@@ -1,5 +1,3 @@
-import { Categoria } from 'src/categoria/entities/categoria.entity';
-import { IPost } from './interfaces/post.interface';
 import {
   Column,
   Entity,
@@ -7,9 +5,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ICategoria } from 'src/categoria/entities/interfaces/categoria.interface';
-import { Usuario } from 'src/usuario/entities/usuario.entity';
-import { IUsuario } from 'src/usuario/entities/interfaces/usuario.interface';
+
+import { Categoria } from '../../categoria/entities/categoria.entity';
+import { ICategoria } from '../../categoria/entities/interfaces/categoria.interface';
+import { IUsuario } from '../../usuario/entities/interfaces/usuario.interface';
+import { Usuario } from '../../usuario/entities/usuario.entity';
+import { IPost } from './interfaces/post.interface';
 
 @Entity({
   name: 'post',

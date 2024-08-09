@@ -9,11 +9,11 @@ import {
   Request,
 } from '@nestjs/common';
 import { z } from 'zod';
-import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
+import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
 import { UsuarioService } from '../services/usuario.service';
-import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
+import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { AuthGuard } from '../../shared/guards/auth.guard';
 
 const sigInUsuarioSchema = z.object({
   login: z.string(),

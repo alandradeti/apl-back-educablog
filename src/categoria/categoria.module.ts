@@ -5,7 +5,7 @@ import { CategoriaRepository } from './repositories/categoria.repository';
 import { CategoriaPgRepository } from './repositories/pg/categoria.pg.repository';
 import { CategoriaService } from './services/categoria.service';
 import { CategoriaController } from './controllers/categoria.controller';
-import { PrometheusService } from 'src/shared/services/prometheus.service';
+import { PrometheusService } from '../shared/services/prometheus.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Categoria])],

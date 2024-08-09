@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ICategoria } from './interfaces/categoria.interface';
-import { Post } from 'src/post/entities/post.entity';
+import { Post } from '../../post/entities/post.entity';
 
 @Entity({
   name: 'categoria',
