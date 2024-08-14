@@ -11,12 +11,13 @@ import {
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
-import { CategoriaService } from '../services/categoria.service';
-import { z } from 'zod';
-import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
-import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
+import { z } from 'zod';
+
+import { AuthGuard } from '../../shared/guards/auth.guard';
+import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
+import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
+import { CategoriaService } from '../services/categoria.service';
 
 const createCategoriaSchema = z.object({
   nome: z.string(),
@@ -38,8 +39,8 @@ export class CategoriaController {
 
   @Get()
   async findAll(
-    @Query('limite') limite: number,
-    @Query('pagina') pagina: number,
+    @Query('limite') limite: number = 10,
+    @Query('pagina') pagina: number = 1,
   ) {
     return this.service.findAll(limite, pagina);
   }

@@ -1,8 +1,9 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Usuario } from 'src/usuario/entities/usuario.entity';
+
+import { IUsuario } from '../../entities/interfaces/usuario.interface';
+import { Usuario } from '../../entities/usuario.entity';
 import { UsuarioRepository } from '../usuario.repository';
-import { IUsuario } from 'src/usuario/entities/interfaces/usuario.interface';
 
 export class UsuarioPgRepository implements UsuarioRepository {
   constructor(

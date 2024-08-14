@@ -1,15 +1,19 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  UseGuards,
   UseInterceptors,
   UsePipes,
+  Request,
 } from '@nestjs/common';
 import { z } from 'zod';
-import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
+import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
 import { UsuarioService } from '../services/usuario.service';
-import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../../shared/guards/auth.guard';
 
 const sigInUsuarioSchema = z.object({
   login: z.string(),
@@ -18,13 +22,13 @@ const sigInUsuarioSchema = z.object({
 
 type SigInUsuario = z.infer<typeof sigInUsuarioSchema>;
 
-@ApiTags('sigin')
+@ApiTags('autenticacao')
 @UseInterceptors(LoggingInterceptor)
-@Controller('sigin')
-export class SigInController {
+@Controller('autenticacao')
+export class AutenticacaoController {
   constructor(private readonly service: UsuarioService) {}
 
-  @Post()
+  @Post('signin')
   @UsePipes(new ZodValidationPipe(sigInUsuarioSchema))
   @ApiBody({
     schema: {
@@ -38,6 +42,13 @@ export class SigInController {
     @Body()
     { login, senha }: SigInUsuario,
   ) {
-    return this.service.signIn(login, senha);
+    return await this.service.signIn(login, senha);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('perfil')
+  getPerfil(@Request() req) {
+    return { id: req.usuario.id };
   }
 }

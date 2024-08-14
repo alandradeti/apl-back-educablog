@@ -1,7 +1,7 @@
-import { IPostagem } from 'src/postagem/entities/interfaces/postagem.interface';
+import { IPost } from 'src/post/entities/interfaces/post.interface';
 
 export interface ICategoria {
   id?: string;
   nome: string;
-  postagens?: IPostagem[];
+  posts?: IPost[];
 }

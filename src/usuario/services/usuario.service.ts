@@ -24,7 +24,9 @@ export class UsuarioService {
 
     if (!senhaMatch) throw new UnauthorizedException('Credenciais inválidas!');
 
-    const token = await this.jwtService.signAsync({ login });
+    const token = await this.jwtService.signAsync({
+      id: usuario.id,
+    });
 
     return { token };
   }
@@ -35,12 +37,12 @@ export class UsuarioService {
     return usuario;
   }
 
-  async create(usuario: IUsuario): Promise<void> {
+  async create(usuario: IUsuario): Promise<string> {
     const senhaCriptografada = await hash(usuario.senha, 8);
 
     usuario.senha = senhaCriptografada;
 
-    await this.repository.create(usuario);
+    return await this.repository.create(usuario);
   }
 
   async update(usuario: IUsuario): Promise<void> {

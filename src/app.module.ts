@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PostagemModule } from './postagem/postagem.module';
+import { PostModule } from './post/post.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
@@ -32,7 +32,7 @@ import { UsuarioModule } from './usuario/usuario.module';
       secret: process.env.JWT_SECRETS,
       signOptions: { expiresIn: '10m' },
     }),
-    PostagemModule,
+    PostModule,
     PessoaModule,
     CategoriaModule,
     UsuarioModule,

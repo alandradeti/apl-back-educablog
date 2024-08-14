@@ -81,51 +81,63 @@ Nest is [MIT licensed](LICENSE).
 
 ## Script DB
 
-```sql 
-drop table if exists postagem;
+```sql
+create extension if not exists "uuid-ossp";
+
+drop table if exists post;
 drop table if exists categoria;
 drop table if exists usuario;
 drop table if exists pessoa;
 
 create table categoria
 (
-  id uuid primary key default uuid_generate_v4() 
+  id uuid primary key default uuid_generate_v4()
   ,nome varchar(100) not null
-);
-
-create table postagem
-(
-  id uuid primary key default uuid_generate_v4() 
-  ,titulo varchar(100) not null 
-  ,descricao varchar(1000) not null
-  ,imagem_url varchar(1000) not null default ''
-  ,data_criacao timestamp without time zone default now()
-  ,data_atualizacao timestamp without time zone default now()
-  ,ativo boolean not null default true
-  ,id_categoria uuid null
-  ,constraint fk_categoria_id foreign key (id_categoria) references categoria(id)
+  ,constraint uq_nome unique (nome)
 );
 
 create table pessoa
 (
-  id uuid primary key default uuid_generate_v4() 
+  id uuid primary key default uuid_generate_v4()
   ,cpf varchar(11) not null
   ,nome varchar(255) not null
   ,email varchar(255) not null
   ,data_nascimento date not null
   ,telefone varchar(20) not null
+  ,constraint uq_cpf unique (cpf)
 );
 
 create table usuario
 (
-  id uuid primary key default uuid_generate_v4() 
-  ,login varchar(10) not null
+  id uuid primary key default uuid_generate_v4()
+  ,login varchar(255) not null
   ,senha varchar(255) not null
   ,id_pessoa uuid null
+  ,constraint uq_login unique (login)
   ,constraint uq_pessoa_id unique (id_pessoa)
   ,constraint fk_pessoa_id foreign key (id_pessoa) references pessoa(id)
 );
 
-create extension if not exists "uuid-ossp"
+create table post
+(
+  id uuid primary key default uuid_generate_v4()
+  ,titulo varchar(100) not null
+  ,descricao varchar(1000) not null
+  ,imagem_url varchar(1000) not null default ''
+  ,ativo boolean not null default true
+  ,id_usuario_criacao uuid not null
+  ,data_criacao timestamp without time zone default now()
+  ,id_usuario_atualizacao uuid not null
+  ,data_atualizacao timestamp without time zone default now()
+  ,id_categoria uuid null
+  ,constraint fk_usuario_criacao_id foreign key (id_usuario_criacao) references usuario(id)
+  ,constraint fk_usuario_atualizacao_id foreign key (id_usuario_atualizacao) references usuario(id)
+  ,constraint fk_categoria_id foreign key (id_categoria) references categoria(id)
+);
+
+-- Usuário admin para usar na autenticação dos testes
+insert into usuario (login, senha)
+values ('admin', '$2a$08$irmxjBNXz3qco099PIxUo.zKhhLMYlUp5XlHqrL0BFZyAYwWM9OXi');
+
 ```
 <!-- slide -->

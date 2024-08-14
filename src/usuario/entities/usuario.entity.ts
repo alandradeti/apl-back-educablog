@@ -2,13 +2,15 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { IUsuario } from './interfaces/usuario.interface';
 import { IPessoa } from 'src/pessoa/entities/interfaces/pessoa.interface';
-import { Pessoa } from 'src/pessoa/entities/pessoa.entity';
+import { Post } from '../../post/entities/post.entity';
+import { Pessoa } from '../../pessoa/entities/pessoa.entity';
 
 @Entity({
   name: 'usuario',
@@ -23,6 +25,7 @@ export class Usuario implements IUsuario {
     name: 'login',
     type: 'varchar',
     nullable: false,
+    unique: true,
   })
   login: string;
 
@@ -45,7 +48,16 @@ export class Usuario implements IUsuario {
     name: 'id_pessoa',
     type: 'uuid',
     nullable: true,
+    unique: true,
   })
   @Unique('uq_pessoa_id', ['id_pessoa'])
   pessoa?: IPessoa | undefined;
+
+  @OneToMany(() => Post, (post) => post.usuarioCriacao)
+  @JoinColumn({ name: 'id', referencedColumnName: 'id_usuario_criacao' })
+  postsCriados?: Post[];
+
+  @OneToMany(() => Post, (post) => post.usuarioCriacao)
+  @JoinColumn({ name: 'id', referencedColumnName: 'id_usuario_atualizacao' })
+  postsAtualizados?: Post[];
 }

@@ -1,12 +1,16 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { setupRedoc } from './shared/middlewares/redoc.middleware';
+import { GlobalExceptionFilter } from './shared/filters/global.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalFilters(new HttpExceptionFilter());
+
+  //Configuração do filtro de exceção global
+  const httpAdapter = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new GlobalExceptionFilter(httpAdapter));
+
   //Configuração do Swagger
   const config = new DocumentBuilder()
     .setTitle('Educablog-API')

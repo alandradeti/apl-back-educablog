@@ -11,11 +11,11 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { z } from 'zod';
-import { ZodValidationPipe } from 'src/shared/pipe/zod-validation.pipe';
-import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
+import { AuthGuard } from '../../shared/guards/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { UsuarioService } from '../services/usuario.service';
-import { LoggingInterceptor } from 'src/shared/interceptors/logging.interceptor';
+import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 
 const createUsuarioSchema = z.object({
   login: z.string(),
@@ -57,6 +57,8 @@ type UpdateUsuario = z.infer<typeof updateUsuarioSchema>;
 export class UsuarioController {
   constructor(private readonly service: UsuarioService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findById(@Param('id') id: string) {
     return this.service.findById(id);
@@ -146,6 +148,7 @@ export class UsuarioController {
         : null,
     });
   }
+
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Delete(':id')
