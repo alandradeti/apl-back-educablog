@@ -78,10 +78,10 @@ describe('Post API', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('/posts (PUT)', async () => {
+  it('/posts/:id (PUT)', async () => {
     post.ativo = false;
     const response = await request(app.getHttpServer())
-      .put('/posts')
+      .put(`/posts/${post.id}`)
       .auth(token, {
         type: 'bearer',
       })
