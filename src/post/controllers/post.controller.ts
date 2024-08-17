@@ -19,7 +19,7 @@ import { AuthGuard } from '../../shared/guards/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 
-const createPostSchema = z.object({
+const postSchema = z.object({
   titulo: z.string(),
   descricao: z.string(),
   imagemUrl: z.string(),
@@ -33,23 +33,7 @@ const createPostSchema = z.object({
     .nullable(),
 });
 
-const updatePostSchema = z.object({
-  id: z.string().uuid(),
-  titulo: z.string(),
-  descricao: z.string(),
-  imagemUrl: z.string(),
-  ativo: z.boolean().optional(),
-  categoria: z
-    .object({
-      id: z.string().uuid().optional(),
-      nome: z.string(),
-    })
-    .optional()
-    .nullable(),
-});
-
-type CreatePost = z.infer<typeof createPostSchema>;
-type UpdatePost = z.infer<typeof updatePostSchema>;
+type BodyPost = z.infer<typeof postSchema>;
 
 @ApiTags('posts')
 @UseInterceptors(LoggingInterceptor)
@@ -96,7 +80,7 @@ export class PostController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @UsePipes(new ZodValidationPipe(createPostSchema))
+  @UsePipes(new ZodValidationPipe(postSchema))
   @Post()
   @ApiBody({
     schema: {
@@ -117,7 +101,7 @@ export class PostController {
   async create(
     @Request() req,
     @Body()
-    { titulo, descricao, imagemUrl, ativo, categoria }: CreatePost,
+    { titulo, descricao, imagemUrl, ativo, categoria }: BodyPost,
   ) {
     return this.service.create({
       titulo,
@@ -134,11 +118,10 @@ export class PostController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Put()
+  @Put(':id')
   @ApiBody({
     schema: {
       properties: {
-        id: { type: 'string' },
         titulo: { type: 'string' },
         descricao: { type: 'string' },
         imagemUrl: { type: 'string' },
@@ -154,8 +137,9 @@ export class PostController {
   })
   async update(
     @Request() req,
-    @Body(new ZodValidationPipe(updatePostSchema))
-    { id, titulo, descricao, imagemUrl, ativo, categoria }: UpdatePost,
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(postSchema))
+    { titulo, descricao, imagemUrl, ativo, categoria }: BodyPost,
   ) {
     return this.service.update({
       id,

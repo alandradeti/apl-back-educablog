@@ -19,17 +19,11 @@ import { LoggingInterceptor } from '../../shared/interceptors/logging.intercepto
 import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
 import { CategoriaService } from '../services/categoria.service';
 
-const createCategoriaSchema = z.object({
+const categoriaSchema = z.object({
   nome: z.string(),
 });
 
-const updateCategoriaSchema = z.object({
-  id: z.string().uuid().optional(),
-  nome: z.string(),
-});
-
-type CreateCategoria = z.infer<typeof createCategoriaSchema>;
-type UpdateCategoria = z.infer<typeof updateCategoriaSchema>;
+type BodyCategoria = z.infer<typeof categoriaSchema>;
 
 @ApiTags('categoria')
 @UseInterceptors(LoggingInterceptor)
@@ -52,7 +46,7 @@ export class CategoriaController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @UsePipes(new ZodValidationPipe(createCategoriaSchema))
+  @UsePipes(new ZodValidationPipe(categoriaSchema))
   @Post()
   @ApiBody({
     schema: {
@@ -61,13 +55,13 @@ export class CategoriaController {
       },
     },
   })
-  async create(@Body() { nome }: CreateCategoria) {
+  async create(@Body() { nome }: BodyCategoria) {
     return this.service.create({ nome });
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Put()
+  @Put(':id')
   @ApiBody({
     schema: {
       properties: {
@@ -77,8 +71,9 @@ export class CategoriaController {
     },
   })
   async update(
-    @Body(new ZodValidationPipe(updateCategoriaSchema))
-    { id, nome }: UpdateCategoria,
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(categoriaSchema))
+    { nome }: BodyCategoria,
   ) {
     return this.service.update({ id, nome });
   }

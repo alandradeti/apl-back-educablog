@@ -60,11 +60,11 @@ describe('Categoria', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('/categoria (PUT)', async () => {
+  it('/categoria/:id (PUT)', async () => {
     categoria.nome = 'Categoria teste PUT';
 
     const response = await request(app.getHttpServer())
-      .put('/categoria')
+      .put(`/categoria/${categoria.id}`)
       .auth(token, {
         type: 'bearer',
       })

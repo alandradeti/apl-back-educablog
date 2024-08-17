@@ -65,9 +65,9 @@ describe('Pessoa', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('/pessoa (PUT)', async () => {
+  it('/pessoa/:id (PUT)', async () => {
     const response = await request(app.getHttpServer())
-      .put('/pessoa')
+      .put(`/pessoa/${pessoa.id}`)
       .auth(token, {
         type: 'bearer',
       })

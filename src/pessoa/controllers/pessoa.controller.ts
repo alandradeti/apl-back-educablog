@@ -19,7 +19,7 @@ import { LoggingInterceptor } from '../../shared/interceptors/logging.intercepto
 import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
 import { PessoaService } from '../services/pessoa.service';
 
-const createPessoaSchema = z.object({
+const pessoaSchema = z.object({
   cpf: z.string(),
   nome: z.string(),
   email: z.string().email(),
@@ -27,17 +27,7 @@ const createPessoaSchema = z.object({
   telefone: z.string(),
 });
 
-const updatePessoaSchema = z.object({
-  id: z.string().uuid(),
-  cpf: z.string(),
-  nome: z.string(),
-  email: z.string().email(),
-  dataNascimento: z.coerce.date(),
-  telefone: z.string(),
-});
-
-type CreatePessoa = z.infer<typeof createPessoaSchema>;
-type UpdatePessoa = z.infer<typeof updatePessoaSchema>;
+type BodyPessoa = z.infer<typeof pessoaSchema>;
 
 @ApiTags('pessoa')
 @UseInterceptors(LoggingInterceptor)
@@ -64,7 +54,7 @@ export class PessoaController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @UsePipes(new ZodValidationPipe(createPessoaSchema))
+  @UsePipes(new ZodValidationPipe(pessoaSchema))
   @Post()
   @ApiBody({
     schema: {
@@ -79,7 +69,7 @@ export class PessoaController {
   })
   async create(
     @Body()
-    { cpf, nome, email, dataNascimento, telefone }: CreatePessoa,
+    { cpf, nome, email, dataNascimento, telefone }: BodyPessoa,
   ) {
     return this.service.create({
       cpf,
@@ -92,11 +82,10 @@ export class PessoaController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Put()
+  @Put(':id')
   @ApiBody({
     schema: {
       properties: {
-        id: { type: 'string', format: 'uuid' },
         cpf: { type: 'string', format: 'cpf' },
         nome: { type: 'string' },
         email: { type: 'string', format: 'email' },
@@ -106,8 +95,9 @@ export class PessoaController {
     },
   })
   async update(
-    @Body(new ZodValidationPipe(updatePessoaSchema))
-    { id, cpf, nome, email, dataNascimento, telefone }: UpdatePessoa,
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(pessoaSchema))
+    { cpf, nome, email, dataNascimento, telefone }: BodyPessoa,
   ) {
     return this.service.update({
       id,
