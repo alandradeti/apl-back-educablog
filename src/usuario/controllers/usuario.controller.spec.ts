@@ -46,11 +46,11 @@ describe('Usuario', () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it('/usuario (PUT)', async () => {
+  it('/usuario/:id (PUT)', async () => {
     usuario.senha = 'coringa';
 
     const response = await request(app.getHttpServer())
-      .put('/usuario')
+      .put(`/usuario/${usuario.id}`)
       .auth(token, {
         type: 'bearer',
       })

@@ -17,7 +17,7 @@ import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { UsuarioService } from '../services/usuario.service';
 import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 
-const createUsuarioSchema = z.object({
+const usuarioSchema = z.object({
   login: z.string(),
   senha: z.string(),
   pessoa: z
@@ -32,24 +32,7 @@ const createUsuarioSchema = z.object({
     .optional(),
 });
 
-const updateUsuarioSchema = z.object({
-  id: z.string().uuid(),
-  login: z.string(),
-  senha: z.string(),
-  pessoa: z
-    .object({
-      id: z.string().uuid(),
-      cpf: z.string(),
-      nome: z.string(),
-      email: z.string().email(),
-      dataNascimento: z.coerce.date(),
-      telefone: z.string(),
-    })
-    .optional(),
-});
-
-type CreateUsuario = z.infer<typeof createUsuarioSchema>;
-type UpdateUsuario = z.infer<typeof updateUsuarioSchema>;
+type BodyUsuario = z.infer<typeof usuarioSchema>;
 
 @ApiTags('usuario')
 @UseInterceptors(LoggingInterceptor)
@@ -66,7 +49,7 @@ export class UsuarioController {
 
   //@ApiBearerAuth()
   //@UseGuards(AuthGuard)
-  @UsePipes(new ZodValidationPipe(createUsuarioSchema))
+  @UsePipes(new ZodValidationPipe(usuarioSchema))
   @Post()
   @ApiBody({
     schema: {
@@ -88,7 +71,7 @@ export class UsuarioController {
   })
   async create(
     @Body()
-    { login, senha, pessoa }: CreateUsuario,
+    { login, senha, pessoa }: BodyUsuario,
   ) {
     return this.service.create({
       login,
@@ -108,11 +91,10 @@ export class UsuarioController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Put()
+  @Put(':id')
   @ApiBody({
     schema: {
       properties: {
-        id: { type: 'string', format: 'uuid' },
         login: { type: 'string' },
         senha: { type: 'string' },
         pessoa: {
@@ -129,8 +111,9 @@ export class UsuarioController {
     },
   })
   async update(
-    @Body(new ZodValidationPipe(updateUsuarioSchema))
-    { id, login, senha, pessoa }: UpdateUsuario,
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(usuarioSchema))
+    { login, senha, pessoa }: BodyUsuario,
   ) {
     return this.service.update({
       id,
