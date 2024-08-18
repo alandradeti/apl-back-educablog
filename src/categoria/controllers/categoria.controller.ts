@@ -65,7 +65,6 @@ export class CategoriaController {
   @ApiBody({
     schema: {
       properties: {
-        id: { type: 'string', format: 'uuid' },
         nome: { type: 'string' },
       },
     },
@@ -73,9 +72,16 @@ export class CategoriaController {
   async update(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(categoriaSchema))
-    { nome }: BodyCategoria,
+    body: Partial<BodyCategoria>,
   ) {
-    return this.service.update({ id, nome });
+    const updateData: any = {};
+
+    if (body.nome !== undefined) updateData.nome = body.nome;
+
+    return this.service.update({
+      id,
+      ...updateData,
+    });
   }
 
   @ApiBearerAuth()

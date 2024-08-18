@@ -95,17 +95,18 @@ export class UsuarioController {
   @ApiBody({
     schema: {
       properties: {
-        login: { type: 'string' },
-        senha: { type: 'string' },
+        login: { type: 'string', nullable: true },
+        senha: { type: 'string', nullable: true },
         pessoa: {
           properties: {
-            id: { type: 'string', format: 'uuid' },
-            cpf: { type: 'string' },
-            nome: { type: 'string' },
-            email: { type: 'string', format: 'email' },
-            dataNascimento: { type: 'string', format: 'date' },
-            telefone: { type: 'string' },
+            id: { type: 'string', format: 'uuid', nullable: true },
+            cpf: { type: 'string', nullable: true },
+            nome: { type: 'string', nullable: true },
+            email: { type: 'string', format: 'email', nullable: true },
+            dataNascimento: { type: 'string', format: 'date', nullable: true },
+            telefone: { type: 'string', nullable: true },
           },
+          nullable: true,
         },
       },
     },
@@ -113,22 +114,26 @@ export class UsuarioController {
   async update(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(usuarioSchema))
-    { login, senha, pessoa }: BodyUsuario,
+    body: Partial<BodyUsuario>,
   ) {
+    const updateData: any = {};
+
+    if (body.login !== undefined) updateData.login = body.login;
+    if (body.senha !== undefined) updateData.senha = body.senha;
+
+    if (body.pessoa !== undefined) {
+      updateData.pessoa = {};
+      if (body.pessoa.id !== undefined) updateData.pessoa.id = body.pessoa.id;
+      if (body.pessoa.cpf !== undefined) updateData.pessoa.cpf = body.pessoa.cpf;
+      if (body.pessoa.nome !== undefined) updateData.pessoa.nome = body.pessoa.nome;
+      if (body.pessoa.email !== undefined) updateData.pessoa.email = body.pessoa.email;
+      if (body.pessoa.dataNascimento !== undefined) updateData.pessoa.dataNascimento = body.pessoa.dataNascimento;
+      if (body.pessoa.telefone !== undefined) updateData.pessoa.telefone = body.pessoa.telefone;
+    }
+
     return this.service.update({
       id,
-      login,
-      senha,
-      pessoa: pessoa
-        ? {
-            id: pessoa.id,
-            cpf: pessoa.cpf,
-            nome: pessoa.nome,
-            email: pessoa.email,
-            dataNascimento: pessoa.dataNascimento,
-            telefone: pessoa.telefone,
-          }
-        : null,
+      ...updateData,
     });
   }
 

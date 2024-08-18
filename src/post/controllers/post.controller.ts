@@ -122,15 +122,16 @@ export class PostController {
   @ApiBody({
     schema: {
       properties: {
-        titulo: { type: 'string' },
-        descricao: { type: 'string' },
-        imagemUrl: { type: 'string' },
-        ativo: { type: 'boolean', default: true },
+        titulo: { type: 'string', nullable: true },
+        descricao: { type: 'string', nullable: true },
+        imagemUrl: { type: 'string', nullable: true },
+        ativo: { type: 'boolean', default: true, nullable: true },
         categoria: {
           properties: {
-            id: { type: 'string', format: 'uuid' },
-            nome: { type: 'string' },
+            id: { type: 'string', format: 'uuid', nullable: true },
+            nome: { type: 'string', nullable: true },
           },
+          nullable: true,
         },
       },
     },
@@ -139,17 +140,26 @@ export class PostController {
     @Request() req,
     @Param('id') id: string,
     @Body(new ZodValidationPipe(postSchema))
-    { titulo, descricao, imagemUrl, ativo, categoria }: BodyPost,
+    body: Partial<BodyPost>,
   ) {
-    return this.service.update({
-      id,
-      titulo,
-      descricao,
-      imagemUrl,
-      ativo,
+    const updateData: any = {
       usuarioAtualizacao: req.usuario.id,
       dataAtualizacao: new Date(),
-      categoria: categoria ? { id: categoria.id, nome: categoria.nome } : null,
+    };
+
+    if (body.titulo !== undefined) updateData.titulo = body.titulo;
+    if (body.descricao !== undefined) updateData.descricao = body.descricao;
+    if (body.imagemUrl !== undefined) updateData.imagemUrl = body.imagemUrl;
+    if (body.ativo !== undefined) updateData.ativo = body.ativo;
+    if (body.categoria !== undefined) {
+      updateData.categoria = body.categoria
+        ? { id: body.categoria.id, nome: body.categoria.nome }
+        : null;
+    }
+
+    return this.service.update({
+      id,
+      ...updateData,
     });
   }
 

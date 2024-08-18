@@ -86,26 +86,30 @@ export class PessoaController {
   @ApiBody({
     schema: {
       properties: {
-        cpf: { type: 'string', format: 'cpf' },
-        nome: { type: 'string' },
-        email: { type: 'string', format: 'email' },
-        dataNascimento: { type: 'string', format: 'date' },
-        telefone: { type: 'string', format: 'phone' },
+        cpf: { type: 'string', format: 'cpf', nullable: true },
+        nome: { type: 'string', nullable: true },
+        email: { type: 'string', format: 'email', nullable: true },
+        dataNascimento: { type: 'string', format: 'date', nullable: true },
+        telefone: { type: 'string', format: 'phone', nullable: true },
       },
     },
   })
   async update(
     @Param('id') id: string,
     @Body(new ZodValidationPipe(pessoaSchema))
-    { cpf, nome, email, dataNascimento, telefone }: BodyPessoa,
+    body: Partial<BodyPessoa>,
   ) {
+    const updateData: any = {};
+
+    if (body.cpf !== undefined) updateData.cpf = body.cpf;
+    if (body.nome !== undefined) updateData.nome = body.nome;
+    if (body.email !== undefined) updateData.email = body.email;
+    if (body.dataNascimento !== undefined) updateData.dataNascimento = body.dataNascimento;
+    if (body.telefone !== undefined) updateData.telefone = body.telefone;
+
     return this.service.update({
       id,
-      cpf,
-      nome,
-      email,
-      dataNascimento,
-      telefone,
+      ...updateData,
     });
   }
 
