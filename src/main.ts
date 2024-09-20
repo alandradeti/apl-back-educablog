@@ -29,6 +29,7 @@ async function bootstrap() {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization',
+    exposedHeaders: 'x-total-count',
     credentials: true,
   });
 
