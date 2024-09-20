@@ -7,11 +7,17 @@ import { PostRepository } from '../repositories/post.repository';
 export class PostService {
   constructor(private readonly repository: PostRepository) {}
 
-  async findAll(limit: number, page: number): Promise<IPost[]> {
+  async findAll(
+    limit: number,
+    page: number,
+  ): Promise<{ data: IPost[]; totalCount: number }> {
     return this.repository.findAll(limit, page);
   }
 
-  async findAllActive(limit: number, page: number): Promise<IPost[]> {
+  async findAllActive(
+    limit: number,
+    page: number,
+  ): Promise<{ data: IPost[]; totalCount: number }> {
     return this.repository.findAllActive(limit, page);
   }
 
@@ -19,17 +25,17 @@ export class PostService {
     limit: number,
     page: number,
     idCategoria: string,
-  ): Promise<IPost[]> {
-    const post = await this.repository.findAllPostCategoria(
+  ): Promise<{ data: IPost[]; totalCount: number }> {
+    const { data, totalCount } = await this.repository.findAllPostCategoria(
       limit,
       page,
       idCategoria,
     );
-    if (!post || post.length === 0)
+    if (!data || data.length === 0)
       throw new NotFoundException(
         'Post não encontrado com a categoria informada!',
       );
-    return post;
+    return { data, totalCount };
   }
 
   async findById(id: string): Promise<IPost> {
@@ -38,12 +44,20 @@ export class PostService {
     return post;
   }
 
-  async search(query: string): Promise<IPost[]> {
-    const posts = await this.repository.search(query);
-    if (!posts || posts.length === 0) {
-      throw new NotFoundException('Nenhuma post encontrado para a busca!');
+  async search(
+    query: string,
+    includeInactive: boolean,
+  ): Promise<{ data: IPost[]; totalCount: number }> {
+    const { data, totalCount } = await this.repository.search(
+      query,
+      includeInactive,
+    );
+
+    if (!data || data.length === 0) {
+      throw new NotFoundException('Nenhum post encontrado para a busca!');
     }
-    return posts;
+
+    return { data, totalCount };
   }
 
   async create(post: IPost): Promise<IPost> {

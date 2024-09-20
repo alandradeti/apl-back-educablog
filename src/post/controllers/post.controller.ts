@@ -11,7 +11,9 @@ import {
   UseInterceptors,
   UsePipes,
   Request,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { PostService } from '../services/post.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
@@ -45,8 +47,16 @@ export class PostController {
   async findAllActive(
     @Query('limite') limite: number = 10,
     @Query('pagina') pagina: number = 1,
+    @Res() res: Response,
   ) {
-    return this.service.findAllActive(limite, pagina);
+    const { data, totalCount } = await this.service.findAllActive(
+      limite,
+      pagina,
+    );
+
+    res.setHeader('x-total-count', totalCount);
+
+    return res.json(data);
   }
 
   @ApiBearerAuth()
@@ -55,8 +65,13 @@ export class PostController {
   async findAll(
     @Query('limite') limite: number = 10,
     @Query('pagina') pagina: number = 1,
+    @Res() res: Response,
   ) {
-    return this.service.findAll(limite, pagina);
+    const { data, totalCount } = await this.service.findAll(limite, pagina);
+
+    res.setHeader('x-total-count', totalCount);
+
+    return res.json(data);
   }
 
   @Get('post-categoria')
@@ -64,13 +79,35 @@ export class PostController {
     @Query('limite') limite: number = 10,
     @Query('pagina') pagina: number = 1,
     @Query('idCategoria') idCategoria: string,
+    @Res() res: Response,
   ) {
-    return this.service.findAllPostCategoria(limite, pagina, idCategoria);
+    const { data, totalCount } = await this.service.findAllPostCategoria(
+      limite,
+      pagina,
+      idCategoria,
+    );
+
+    res.setHeader('x-total-count', totalCount);
+
+    return res.json(data);
   }
 
   @Get('search')
-  async search(@Query('query') query: string) {
-    return this.service.search(query);
+  async search(
+    @Query('query') query: string,
+    @Request() req,
+    @Res() res: Response,
+  ) {
+    const isAuthenticated = !!req.usuario;
+
+    const { data, totalCount } = await this.service.search(
+      query,
+      isAuthenticated,
+    );
+
+    res.setHeader('x-total-count', totalCount);
+
+    return res.json(data);
   }
 
   @Get(':id')
