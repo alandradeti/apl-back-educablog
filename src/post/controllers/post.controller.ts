@@ -98,12 +98,21 @@ export class PostController {
     @Request() req,
     @Res() res: Response,
   ) {
-    const isAuthenticated = !!req.usuario;
+    const { data, totalCount } = await this.service.search(query, false);
 
-    const { data, totalCount } = await this.service.search(
-      query,
-      isAuthenticated,
-    );
+    res.setHeader('x-total-count', totalCount);
+
+    return res.json(data);
+  }
+
+  @Get('admin/search')
+  @UseGuards(AuthGuard)
+  async adminSearch(
+    @Query('query') query: string,
+    @Request() req,
+    @Res() res: Response,
+  ) {
+    const { data, totalCount } = await this.service.search(query, true);
 
     res.setHeader('x-total-count', totalCount);
 
