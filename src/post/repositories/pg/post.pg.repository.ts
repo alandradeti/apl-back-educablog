@@ -1,7 +1,7 @@
 import { IPost } from 'src/post/entities/interfaces/post.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../../entities/post.entity';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { PostRepository } from '../post.repository';
 
 export class PostPgRepository implements PostRepository {
@@ -76,10 +76,16 @@ export class PostPgRepository implements PostRepository {
     query: string,
     includeInactive: boolean,
   ): Promise<{ data: IPost[]; totalCount: number }> {
-    const qb = this.repository
-      .createQueryBuilder('post')
-      .where('post.titulo ILIKE :query', { query: `%${query}%` })
-      .orWhere('post.descricao ILIKE :query', { query: `%${query}%` });
+    const qb = this.repository.createQueryBuilder('post').where(
+      new Brackets((qb) => {
+        qb.where('post.titulo ILIKE :query', { query: `%${query}%` }).orWhere(
+          'post.descricao ILIKE :query',
+          {
+            query: `%${query}%`,
+          },
+        );
+      }),
+    );
 
     if (!includeInactive) {
       qb.andWhere('post.ativo = :ativo', { ativo: true });
