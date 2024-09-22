@@ -26,6 +26,9 @@ import { UsuarioModule } from './usuario/usuario.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       logging: process.env.NODE_ENV === 'development',
+      ssl: {
+        rejectUnauthorized: process.env.NODE_ENV !== 'development',
+      },
     }),
     JwtModule.register({
       global: true,
