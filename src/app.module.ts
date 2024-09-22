@@ -27,7 +27,7 @@ import { UsuarioModule } from './usuario/usuario.module';
       synchronize: true,
       logging: process.env.NODE_ENV === 'development',
       ssl: {
-        rejectUnauthorized: process.env.NODE_ENV !== 'development',
+        rejectUnauthorized: process.env.VERIFY_SSL_DATABASE === 'true',
       },
     }),
     JwtModule.register({
