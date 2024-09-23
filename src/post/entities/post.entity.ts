@@ -30,7 +30,7 @@ export class Post implements IPost {
 
   @Column({
     name: 'descricao',
-    type: 'varchar',
+    type: 'text',
     nullable: false,
   })
   descricao: string;

@@ -14,15 +14,29 @@ export class PostPgRepository implements PostRepository {
     const maxLimite = Math.min(limite, 50);
 
     const [data, totalCount] = await this.repository.findAndCount({
-      relations: ['categoria', 'usuarioCriacao', 'usuarioAtualizacao'],
+      relations: [
+        'categoria',
+        'usuarioCriacao',
+        'usuarioCriacao.pessoa',
+        'usuarioAtualizacao',
+        'usuarioAtualizacao.pessoa',
+      ],
       select: {
         usuarioCriacao: {
           id: true,
           login: true,
+          pessoa: {
+            id: true,
+            nome: true, // ou outros campos que quiser retornar da entidade `Pessoa`
+          },
         },
         usuarioAtualizacao: {
           id: true,
           login: true,
+          pessoa: {
+            id: true,
+            nome: true,
+          },
         },
       },
       skip: (pagina - 1) * maxLimite,
@@ -39,7 +53,17 @@ export class PostPgRepository implements PostRepository {
     const maxLimite = Math.min(limite, 50);
 
     const [data, totalCount] = await this.repository.findAndCount({
-      relations: ['categoria'],
+      relations: ['categoria', 'usuarioCriacao', 'usuarioCriacao.pessoa'],
+      select: {
+        usuarioCriacao: {
+          id: true,
+          login: true,
+          pessoa: {
+            id: true,
+            nome: true,
+          },
+        },
+      },
       where: { ativo: true },
       skip: (pagina - 1) * maxLimite,
       take: maxLimite,
@@ -67,8 +91,32 @@ export class PostPgRepository implements PostRepository {
 
   async findById(id: string): Promise<IPost | null> {
     return this.repository.findOne({
-      relations: ['categoria'],
+      relations: [
+        'categoria',
+        'usuarioCriacao',
+        'usuarioCriacao.pessoa',
+        'usuarioAtualizacao',
+        'usuarioAtualizacao.pessoa',
+      ],
       where: { id },
+      select: {
+        usuarioCriacao: {
+          id: true,
+          login: true,
+          pessoa: {
+            id: true,
+            nome: true,
+          },
+        },
+        usuarioAtualizacao: {
+          id: true,
+          login: true,
+          pessoa: {
+            id: true,
+            nome: true,
+          },
+        },
+      },
     });
   }
 
@@ -76,16 +124,22 @@ export class PostPgRepository implements PostRepository {
     query: string,
     includeInactive: boolean,
   ): Promise<{ data: IPost[]; totalCount: number }> {
-    const qb = this.repository.createQueryBuilder('post').where(
-      new Brackets((qb) => {
-        qb.where('post.titulo ILIKE :query', { query: `%${query}%` }).orWhere(
-          'post.descricao ILIKE :query',
-          {
-            query: `%${query}%`,
-          },
-        );
-      }),
-    );
+    const qb = this.repository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.usuarioCriacao', 'usuarioCriacao')
+      .leftJoinAndSelect('usuarioCriacao.pessoa', 'pessoaCriacao')
+      .leftJoinAndSelect('post.usuarioAtualizacao', 'usuarioAtualizacao')
+      .leftJoinAndSelect('usuarioAtualizacao.pessoa', 'pessoaAtualizacao')
+      .where(
+        new Brackets((qb) => {
+          qb.where('post.titulo ILIKE :query', { query: `%${query}%` }).orWhere(
+            'post.descricao ILIKE :query',
+            {
+              query: `%${query}%`,
+            },
+          );
+        }),
+      );
 
     if (!includeInactive) {
       qb.andWhere('post.ativo = :ativo', { ativo: true });
