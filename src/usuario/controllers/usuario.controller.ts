@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -20,6 +21,7 @@ import { LoggingInterceptor } from '../../shared/interceptors/logging.intercepto
 const usuarioSchema = z.object({
   login: z.string(),
   senha: z.string(),
+  tipo: z.enum(['admin', 'professor', 'aluno']).default('aluno'),
   pessoa: z
     .object({
       id: z.string().uuid().optional(),
@@ -42,9 +44,21 @@ export class UsuarioController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @Get()
+  async findAll(
+    @Query('limite') limite: number = 10,
+    @Query('pagina') pagina: number = 1,
+  ) {
+    return this.service.findAll(limite, pagina);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return this.service.findById(id);
+    const usuario = await this.service.findById(id);
+    console.log('usuario', usuario);
+    return usuario;
   }
 
   //@ApiBearerAuth()
@@ -56,6 +70,11 @@ export class UsuarioController {
       properties: {
         login: { type: 'string' },
         senha: { type: 'string' },
+        tipo: {
+          type: 'string',
+          enum: ['admin', 'professor', 'aluno'],
+          default: 'aluno',
+        },
         pessoa: {
           properties: {
             id: { type: 'string', format: 'uuid' },
@@ -71,11 +90,12 @@ export class UsuarioController {
   })
   async create(
     @Body()
-    { login, senha, pessoa }: BodyUsuario,
+    { login, senha, tipo, pessoa }: BodyUsuario,
   ) {
     return this.service.create({
       login,
       senha,
+      tipo,
       pessoa: pessoa
         ? {
             id: pessoa.id,
@@ -97,6 +117,11 @@ export class UsuarioController {
       properties: {
         login: { type: 'string', nullable: true },
         senha: { type: 'string', nullable: true },
+        tipo: {
+          type: 'string',
+          enum: ['admin', 'professor', 'aluno'],
+          default: 'aluno',
+        },
         pessoa: {
           properties: {
             id: { type: 'string', format: 'uuid', nullable: true },
@@ -120,15 +145,21 @@ export class UsuarioController {
 
     if (body.login !== undefined) updateData.login = body.login;
     if (body.senha !== undefined) updateData.senha = body.senha;
+    if (body.tipo !== undefined) updateData.tipo = body.tipo;
 
     if (body.pessoa !== undefined) {
       updateData.pessoa = {};
       if (body.pessoa.id !== undefined) updateData.pessoa.id = body.pessoa.id;
-      if (body.pessoa.cpf !== undefined) updateData.pessoa.cpf = body.pessoa.cpf;
-      if (body.pessoa.nome !== undefined) updateData.pessoa.nome = body.pessoa.nome;
-      if (body.pessoa.email !== undefined) updateData.pessoa.email = body.pessoa.email;
-      if (body.pessoa.dataNascimento !== undefined) updateData.pessoa.dataNascimento = body.pessoa.dataNascimento;
-      if (body.pessoa.telefone !== undefined) updateData.pessoa.telefone = body.pessoa.telefone;
+      if (body.pessoa.cpf !== undefined)
+        updateData.pessoa.cpf = body.pessoa.cpf;
+      if (body.pessoa.nome !== undefined)
+        updateData.pessoa.nome = body.pessoa.nome;
+      if (body.pessoa.email !== undefined)
+        updateData.pessoa.email = body.pessoa.email;
+      if (body.pessoa.dataNascimento !== undefined)
+        updateData.pessoa.dataNascimento = body.pessoa.dataNascimento;
+      if (body.pessoa.telefone !== undefined)
+        updateData.pessoa.telefone = body.pessoa.telefone;
     }
 
     return this.service.update({
