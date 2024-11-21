@@ -10,6 +10,21 @@ export class UsuarioPgRepository implements UsuarioRepository {
     @InjectRepository(Usuario) private repository: Repository<Usuario>,
   ) {}
 
+  async findAll(
+    limite: number,
+    pagina: number,
+  ): Promise<{ usuarios: IUsuario[]; totalCount: number } | null> {
+    const maxLimite = Math.min(limite, 50);
+
+    const [usuarios, totalCount] = await this.repository.findAndCount({
+      relations: ['pessoa'],
+      skip: (pagina - 1) * maxLimite,
+      take: maxLimite,
+    });
+
+    return { usuarios, totalCount };
+  }
+
   async findByLogin(login: string): Promise<IUsuario | null> {
     return await this.repository.findOne({
       where: { login: login },

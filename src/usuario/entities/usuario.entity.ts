@@ -36,6 +36,15 @@ export class Usuario implements IUsuario {
   })
   senha: string;
 
+  @Column({
+    name: 'tipo',
+    type: 'varchar',
+    enum: ['admin', 'professor', 'aluno'],
+    default: 'aluno',
+    nullable: false,
+  })
+  tipo: string;
+
   @OneToOne(() => Pessoa, {
     cascade: true,
   })
