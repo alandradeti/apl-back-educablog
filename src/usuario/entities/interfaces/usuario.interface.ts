@@ -4,5 +4,6 @@ export interface IUsuario {
   id?: string;
   login: string;
   senha: string;
+  tipo: string;
   pessoa?: IPessoa;
 }

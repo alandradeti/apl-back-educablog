@@ -31,6 +31,13 @@ export class UsuarioService {
     return { token };
   }
 
+  async findAll(
+    limit: number,
+    page: number,
+  ): Promise<{ usuarios: IUsuario[]; totalCount: number }> {
+    return this.repository.findAll(limit, page);
+  }
+
   async findById(id: string): Promise<IUsuario> {
     const usuario = await this.repository.findById(id);
     if (!usuario) throw new NotFoundException('Usuario não encontrado!');
