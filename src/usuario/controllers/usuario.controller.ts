@@ -19,8 +19,8 @@ import { UsuarioService } from '../services/usuario.service';
 import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 
 const usuarioSchema = z.object({
-  login: z.string(),
-  senha: z.string(),
+  login: z.string().optional().nullable(),
+  senha: z.string().optional().nullable(),
   tipo: z.enum(['admin', 'professor', 'aluno']).default('aluno'),
   pessoa: z
     .object({
