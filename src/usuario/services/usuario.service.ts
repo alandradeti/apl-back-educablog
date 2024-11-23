@@ -46,7 +46,7 @@ export class UsuarioService {
 
   async findById(id: string): Promise<IUsuario> {
     const usuario = await this.repository.findById(id);
-    if (!usuario) throw new NotFoundException('Usuario não encontrado!');
+    if (!usuario) throw new NotFoundException('Usuário não encontrado!');
     return usuario;
   }
 
@@ -56,6 +56,14 @@ export class UsuarioService {
     usuario.senha = senhaCriptografada;
 
     return await this.repository.create(usuario);
+  }
+
+  async findByTipo(
+    tipo: string,
+  ): Promise<{ usuarios: IUsuario[]; totalCount: number }> {
+    const { usuarios, totalCount } = await this.repository.findByTipo(tipo);
+
+    return { usuarios, totalCount };
   }
 
   async update(usuario: IUsuario): Promise<void> {
