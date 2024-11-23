@@ -5,7 +5,6 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 import { IUsuario } from './interfaces/usuario.interface';
 import { IPessoa } from 'src/pessoa/entities/interfaces/pessoa.interface';
@@ -39,7 +38,6 @@ export class Usuario implements IUsuario {
   @Column({
     name: 'tipo',
     type: 'varchar',
-    enum: ['admin', 'professor', 'aluno'],
     default: 'aluno',
     nullable: false,
   })

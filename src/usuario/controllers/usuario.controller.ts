@@ -52,12 +52,17 @@ export class UsuarioController {
     return this.service.findAll(limite, pagina);
   }
 
+  @Get('tipoUsuario')
+  async findByTipo(@Query('tipo') tipo: string) {
+    const { usuarios, totalCount } = await this.service.findByTipo(tipo);
+    return { usuarios, totalCount };
+  }
+
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get(':id')
   async findById(@Param('id') id: string) {
     const usuario = await this.service.findById(id);
-    console.log('usuario', usuario);
     return usuario;
   }
 
