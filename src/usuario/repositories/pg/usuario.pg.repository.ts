@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 
 import { IUsuario } from '../../entities/interfaces/usuario.interface';
 import { Usuario } from '../../entities/usuario.entity';
@@ -23,6 +23,25 @@ export class UsuarioPgRepository implements UsuarioRepository {
     });
 
     return { usuarios, totalCount };
+  }
+
+  async search(
+    tipo: string,
+    query: string,
+  ): Promise<{ data: IUsuario[]; totalCount: number }> {
+    const qb = this.repository
+      .createQueryBuilder('usuario')
+      .innerJoinAndSelect('usuario.pessoa', 'pessoa') // Inclui o JOIN com a tabela pessoa
+      .where(
+        new Brackets((subQuery) => {
+          subQuery
+            .where('pessoa.nome ILIKE :query', { query: `%${query}%` })
+            .andWhere('usuario.tipo = :tipo', { tipo });
+        }),
+      );
+
+    const [data, totalCount] = await qb.getManyAndCount();
+    return { data, totalCount };
   }
 
   async findByLogin(login: string): Promise<IUsuario | null> {

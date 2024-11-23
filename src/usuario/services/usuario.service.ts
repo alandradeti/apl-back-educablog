@@ -44,6 +44,19 @@ export class UsuarioService {
     return this.repository.findAll(limit, page);
   }
 
+  async search(
+    tipo: string,
+    query: string,
+  ): Promise<{ data: IUsuario[]; totalCount: number }> {
+    const { data, totalCount } = await this.repository.search(tipo, query);
+
+    if (!data || data.length === 0) {
+      throw new NotFoundException('Nenhum usuário encontrado para a busca!');
+    }
+
+    return { data, totalCount };
+  }
+
   async findById(id: string): Promise<IUsuario> {
     const usuario = await this.repository.findById(id);
     if (!usuario) throw new NotFoundException('Usuário não encontrado!');
