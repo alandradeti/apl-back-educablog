@@ -54,13 +54,6 @@ export class Usuario implements IUsuario {
     referencedColumnName: 'id',
     foreignKeyConstraintName: 'fk_pessoa_id',
   })
-  @Column({
-    name: 'id_pessoa',
-    type: 'uuid',
-    nullable: true,
-    unique: true,
-  })
-  @Unique('uq_pessoa_id', ['id_pessoa'])
   pessoa?: IPessoa | undefined;
 
   @OneToMany(() => Post, (post) => post.usuarioCriacao)
