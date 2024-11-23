@@ -112,10 +112,11 @@ create table usuario
   id uuid primary key default uuid_generate_v4()
   ,login varchar(255) not null
   ,senha varchar(255) not null
+  ,tipo varchar(20) 
   ,id_pessoa uuid null
   ,constraint uq_login unique (login)
   ,constraint uq_pessoa_id unique (id_pessoa)
-  ,constraint fk_pessoa_id foreign key (id_pessoa) references pessoa(id)
+  ,constraint fk_pessoa_id foreign key (id_pessoa) references pessoa(id) on delete cascade
 );
 
 create table post
