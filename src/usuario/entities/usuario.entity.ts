@@ -47,6 +47,7 @@ export class Usuario implements IUsuario {
 
   @OneToOne(() => Pessoa, {
     cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({
     name: 'id_pessoa',
