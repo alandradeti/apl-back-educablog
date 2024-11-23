@@ -28,7 +28,7 @@ export class UsuarioPgRepository implements UsuarioRepository {
   async search(
     tipo: string,
     query: string,
-  ): Promise<{ data: IUsuario[]; totalCount: number }> {
+  ): Promise<{ usuarios: IUsuario[]; totalCount: number }> {
     const qb = this.repository
       .createQueryBuilder('usuario')
       .innerJoinAndSelect('usuario.pessoa', 'pessoa') // Inclui o JOIN com a tabela pessoa
@@ -40,8 +40,8 @@ export class UsuarioPgRepository implements UsuarioRepository {
         }),
       );
 
-    const [data, totalCount] = await qb.getManyAndCount();
-    return { data, totalCount };
+    const [usuarios, totalCount] = await qb.getManyAndCount();
+    return { usuarios, totalCount };
   }
 
   async findByLogin(login: string): Promise<IUsuario | null> {

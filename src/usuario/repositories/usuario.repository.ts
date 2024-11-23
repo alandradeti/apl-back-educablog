@@ -8,7 +8,7 @@ export abstract class UsuarioRepository {
   abstract search(
     tipo: string,
     query: string,
-  ): Promise<{ data: IUsuario[]; totalCount: number }>;
+  ): Promise<{ usuarios: IUsuario[]; totalCount: number }>;
   abstract findById(id: string): Promise<IUsuario | null>;
   abstract findByLogin(login: string): Promise<IUsuario | null>;
   abstract findByTipo(
