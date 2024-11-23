@@ -62,11 +62,11 @@ export class UsuarioController {
     @Request() req,
     @Res() res: Response,
   ) {
-    const { data, totalCount } = await this.service.search(tipo, query);
+    const { usuarios, totalCount } = await this.service.search(tipo, query);
 
     res.setHeader('x-total-count', totalCount);
 
-    return res.json(data);
+    return res.json(usuarios);
   }
 
   @ApiBearerAuth()
