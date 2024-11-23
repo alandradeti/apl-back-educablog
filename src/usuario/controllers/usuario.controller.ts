@@ -7,9 +7,11 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UseGuards,
   UseInterceptors,
   UsePipes,
+  Request,
 } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
@@ -17,6 +19,7 @@ import { AuthGuard } from '../../shared/guards/auth.guard';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { UsuarioService } from '../services/usuario.service';
 import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
+import { Response } from 'express';
 
 const usuarioSchema = z.object({
   login: z.string().optional().nullable(),
@@ -50,6 +53,20 @@ export class UsuarioController {
     @Query('pagina') pagina: number = 1,
   ) {
     return this.service.findAll(limite, pagina);
+  }
+
+  @Get('search')
+  async search(
+    @Query('tipo') tipo: string,
+    @Query('query') query: string,
+    @Request() req,
+    @Res() res: Response,
+  ) {
+    const { data, totalCount } = await this.service.search(tipo, query);
+
+    res.setHeader('x-total-count', totalCount);
+
+    return res.json(data);
   }
 
   @ApiBearerAuth()
