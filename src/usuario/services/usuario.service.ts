@@ -15,7 +15,10 @@ export class UsuarioService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(login: string, senha: string): Promise<{ token: string }> {
+  async signIn(
+    login: string,
+    senha: string,
+  ): Promise<{ token: string; tipo: string }> {
     const usuario = await this.repository.findByLogin(login);
 
     if (!usuario) throw new UnauthorizedException('Credenciais inválidas!');
@@ -28,7 +31,10 @@ export class UsuarioService {
       id: usuario.id,
     });
 
-    return { token };
+    return {
+      token,
+      tipo: usuario.tipo,
+    };
   }
 
   async findAll(
