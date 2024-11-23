@@ -53,9 +53,11 @@ export class UsuarioService {
   }
 
   async update(usuario: IUsuario): Promise<void> {
-    const senhaCriptografada = await hash(usuario.senha, 8);
+    if (usuario.senha !== undefined) {
+      const senhaCriptografada = await hash(usuario.senha, 8);
 
-    usuario.senha = senhaCriptografada;
+      usuario.senha = senhaCriptografada;
+    }
 
     await this.repository.update(usuario);
   }
