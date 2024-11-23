@@ -47,14 +47,14 @@ export class UsuarioService {
   async search(
     tipo: string,
     query: string,
-  ): Promise<{ data: IUsuario[]; totalCount: number }> {
-    const { data, totalCount } = await this.repository.search(tipo, query);
+  ): Promise<{ usuarios: IUsuario[]; totalCount: number }> {
+    const { usuarios, totalCount } = await this.repository.search(tipo, query);
 
-    if (!data || data.length === 0) {
+    if (!usuarios || usuarios.length === 0) {
       throw new NotFoundException('Nenhum usuário encontrado para a busca!');
     }
 
-    return { data, totalCount };
+    return { usuarios, totalCount };
   }
 
   async findById(id: string): Promise<IUsuario> {
