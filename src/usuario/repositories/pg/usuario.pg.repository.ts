@@ -54,16 +54,6 @@ export class UsuarioPgRepository implements UsuarioRepository {
     });
   }
 
-  async findByTipo(
-    tipo: string,
-  ): Promise<{ usuarios: IUsuario[]; totalCount: number } | null> {
-    const [usuarios, totalCount] = await this.repository.findAndCount({
-      where: { tipo: tipo },
-      relations: ['pessoa'],
-    });
-    return { usuarios, totalCount };
-  }
-
   async findById(id: string): Promise<IUsuario | null> {
     return await this.repository.findOne({
       relations: ['pessoa'],

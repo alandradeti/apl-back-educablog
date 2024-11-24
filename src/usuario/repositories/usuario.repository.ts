@@ -11,9 +11,6 @@ export abstract class UsuarioRepository {
   ): Promise<{ usuarios: IUsuario[]; totalCount: number }>;
   abstract findById(id: string): Promise<IUsuario | null>;
   abstract findByLogin(login: string): Promise<IUsuario | null>;
-  abstract findByTipo(
-    tipo: string,
-  ): Promise<{ usuarios: IUsuario[]; totalCount: number }>;
   abstract create(usuario: IUsuario): Promise<string | null>;
   abstract update(usuario: IUsuario): Promise<string> | null;
   abstract delete(id: string): Promise<void>;

@@ -55,6 +55,8 @@ export class UsuarioController {
     return this.service.findAll(limite, pagina);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('search')
   @ApiQuery({
     name: 'tipo',
@@ -77,14 +79,6 @@ export class UsuarioController {
     res.setHeader('x-total-count', totalCount);
 
     return res.json(usuarios);
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Get('tipoUsuario')
-  async findByTipo(@Query('tipo') tipo: string) {
-    const { usuarios, totalCount } = await this.service.findByTipo(tipo);
-    return { usuarios, totalCount };
   }
 
   @ApiBearerAuth()
