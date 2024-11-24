@@ -96,6 +96,16 @@ create table categoria
   ,constraint uq_nome unique (nome)
 );
 
+create table usuario
+(
+  id uuid primary key default uuid_generate_v4()
+  ,login varchar(255) not null
+  ,senha varchar(255) not null
+  ,tipo varchar(20)
+  ,constraint uq_login unique (login)
+);
+
+
 create table pessoa
 (
   id uuid primary key default uuid_generate_v4()
@@ -104,19 +114,10 @@ create table pessoa
   ,email varchar(255) not null
   ,data_nascimento date not null
   ,telefone varchar(20) not null
+  ,id_usuario uuid null
   ,constraint uq_cpf unique (cpf)
-  ,constraint fk_pessoa_usuario foreign key (id) references usuario(id_pessoa) on delete cascade
-);
-
-create table usuario
-(
-  id uuid primary key default uuid_generate_v4()
-  ,login varchar(255) not null
-  ,senha varchar(255) not null
-  ,tipo varchar(20) 
-  ,id_pessoa uuid null
-  ,constraint uq_login unique (login)
-  ,constraint uq_pessoa_id unique (id_pessoa)
+  ,constraint uq_usuario_id unique (id_usuario)
+  ,constraint fk_usuario_id foreign key (id_usuario) references usuario(id) on delete cascade
 );
 
 create table post

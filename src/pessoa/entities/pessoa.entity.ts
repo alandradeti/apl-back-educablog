@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IPessoa } from '../entities/interfaces/pessoa.interface';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
 
 @Entity({
   name: 'pessoa',
@@ -45,4 +52,14 @@ export class Pessoa implements IPessoa {
     nullable: false,
   })
   telefone: string;
+
+  @OneToOne(() => Usuario, (user) => user.pessoa, {
+    // eager: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    name: 'id_usuario',
+    foreignKeyConstraintName: 'fk_usuario_id',
+  })
+  usuario?: Usuario | undefined;
 }
