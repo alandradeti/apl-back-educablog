@@ -27,16 +27,20 @@ export class UsuarioPgRepository implements UsuarioRepository {
 
   async search(
     tipo: string,
-    query: string,
+    query?: string,
   ): Promise<{ usuarios: IUsuario[]; totalCount: number }> {
     const qb = this.repository
       .createQueryBuilder('usuario')
-      .innerJoinAndSelect('usuario.pessoa', 'pessoa') // Inclui o JOIN com a tabela pessoa
+      .innerJoinAndSelect('usuario.pessoa', 'pessoa')
       .where(
         new Brackets((subQuery) => {
-          subQuery
-            .where('pessoa.nome ILIKE :query', { query: `%${query}%` })
-            .andWhere('usuario.tipo = :tipo', { tipo });
+          subQuery.where('usuario.tipo = :tipo', { tipo });
+
+          if (query && query.trim() !== '') {
+            subQuery.andWhere('pessoa.nome ILIKE :query', {
+              query: `%${query}%`,
+            });
+          }
         }),
       );
 
