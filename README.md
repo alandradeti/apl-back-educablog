@@ -105,6 +105,7 @@ create table pessoa
   ,data_nascimento date not null
   ,telefone varchar(20) not null
   ,constraint uq_cpf unique (cpf)
+  ,constraint fk_pessoa_usuario foreign key (id) references usuario(id_pessoa) on delete cascade
 );
 
 create table usuario
@@ -116,7 +117,6 @@ create table usuario
   ,id_pessoa uuid null
   ,constraint uq_login unique (login)
   ,constraint uq_pessoa_id unique (id_pessoa)
-  ,constraint fk_pessoa_id foreign key (id_pessoa) references pessoa(id) on delete cascade
 );
 
 create table post

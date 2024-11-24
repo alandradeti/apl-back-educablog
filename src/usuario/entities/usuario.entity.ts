@@ -50,7 +50,7 @@ export class Usuario implements IUsuario {
   @JoinColumn({
     name: 'id_pessoa',
     referencedColumnName: 'id',
-    foreignKeyConstraintName: 'fk_pessoa_id',
+    foreignKeyConstraintName: 'fk_pessoa_usuario',
   })
   pessoa?: IPessoa | undefined;
 
