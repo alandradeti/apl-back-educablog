@@ -46,7 +46,7 @@ export class UsuarioService {
 
   async search(
     tipo: string,
-    query: string,
+    query?: string,
   ): Promise<{ usuarios: IUsuario[]; totalCount: number }> {
     const { usuarios, totalCount } = await this.repository.search(tipo, query);
 

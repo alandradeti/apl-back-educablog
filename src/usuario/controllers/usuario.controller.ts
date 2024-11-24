@@ -16,7 +16,7 @@ import {
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../shared/pipe/zod-validation.pipe';
 import { AuthGuard } from '../../shared/guards/auth.guard';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UsuarioService } from '../services/usuario.service';
 import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 import { Response } from 'express';
@@ -56,11 +56,21 @@ export class UsuarioController {
   }
 
   @Get('search')
+  @ApiQuery({
+    name: 'tipo',
+    required: true,
+    description: 'Tipo do usuário',
+  })
+  @ApiQuery({
+    name: 'query',
+    required: false,
+    description: 'Nome para pesquisa (opcional)',
+  })
   async search(
-    @Query('tipo') tipo: string,
-    @Query('query') query: string,
     @Request() req,
     @Res() res: Response,
+    @Query('tipo') tipo: string,
+    @Query('query') query?: string,
   ) {
     const { usuarios, totalCount } = await this.service.search(tipo, query);
 
