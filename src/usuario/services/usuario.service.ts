@@ -71,14 +71,6 @@ export class UsuarioService {
     return await this.repository.create(usuario);
   }
 
-  async findByTipo(
-    tipo: string,
-  ): Promise<{ usuarios: IUsuario[]; totalCount: number }> {
-    const { usuarios, totalCount } = await this.repository.findByTipo(tipo);
-
-    return { usuarios, totalCount };
-  }
-
   async update(usuario: IUsuario): Promise<void> {
     if (usuario.senha !== undefined) {
       const senhaCriptografada = await hash(usuario.senha, 8);
