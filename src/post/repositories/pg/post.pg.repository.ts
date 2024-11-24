@@ -39,6 +39,7 @@ export class PostPgRepository implements PostRepository {
           },
         },
       },
+      order: { dataCriacao: 'DESC' },
       skip: (pagina - 1) * maxLimite,
       take: maxLimite,
     });
@@ -65,6 +66,7 @@ export class PostPgRepository implements PostRepository {
         },
       },
       where: { ativo: true },
+      order: { dataCriacao: 'DESC' },
       skip: (pagina - 1) * maxLimite,
       take: maxLimite,
     });
@@ -82,6 +84,7 @@ export class PostPgRepository implements PostRepository {
     const [data, totalCount] = await this.repository.findAndCount({
       relations: ['categoria'],
       where: { categoria: { id: idCategoria } },
+      order: { dataCriacao: 'DESC' },
       skip: (pagina - 1) * maxLimite,
       take: maxLimite,
     });
@@ -139,7 +142,8 @@ export class PostPgRepository implements PostRepository {
             },
           );
         }),
-      );
+      )
+      .orderBy('post.data_criacao', 'DESC');
 
     if (!includeInactive) {
       qb.andWhere('post.ativo = :ativo', { ativo: true });

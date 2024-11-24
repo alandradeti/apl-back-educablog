@@ -17,7 +17,9 @@ export class UsuarioPgRepository implements UsuarioRepository {
     const maxLimite = Math.min(limite, 50);
 
     const [usuarios, totalCount] = await this.repository.findAndCount({
-      relations: ['pessoa'],
+      relations: {
+        pessoa: true,
+      },
       skip: (pagina - 1) * maxLimite,
       take: maxLimite,
     });
@@ -56,7 +58,9 @@ export class UsuarioPgRepository implements UsuarioRepository {
 
   async findById(id: string): Promise<IUsuario | null> {
     return await this.repository.findOne({
-      relations: ['pessoa'],
+      relations: {
+        pessoa: true,
+      },
       where: { id },
     });
   }

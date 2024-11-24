@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IUsuario } from './interfaces/usuario.interface';
-import { IPessoa } from 'src/pessoa/entities/interfaces/pessoa.interface';
 import { Post } from '../../post/entities/post.entity';
 import { Pessoa } from '../../pessoa/entities/pessoa.entity';
 
@@ -43,16 +42,10 @@ export class Usuario implements IUsuario {
   })
   tipo: string;
 
-  @OneToOne(() => Pessoa, {
+  @OneToOne(() => Pessoa, (pessoa) => pessoa.usuario, {
     cascade: true,
-    onDelete: 'CASCADE',
   })
-  @JoinColumn({
-    name: 'id_pessoa',
-    referencedColumnName: 'id',
-    foreignKeyConstraintName: 'fk_pessoa_usuario',
-  })
-  pessoa?: IPessoa | undefined;
+  pessoa?: Pessoa | undefined;
 
   @OneToMany(() => Post, (post) => post.usuarioCriacao)
   @JoinColumn({ name: 'id', referencedColumnName: 'id_usuario_criacao' })
