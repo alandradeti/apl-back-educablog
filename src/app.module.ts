@@ -34,7 +34,12 @@ import { UsuarioModule } from './usuario/usuario.module';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRETS,
-      signOptions: { expiresIn: '10m' },
+      signOptions: {
+        expiresIn: parseInt(
+          process.env.TOKEN_EXPIRATION_TIME || '86400000',
+          10,
+        ),
+      },
     }),
     PostModule,
     PessoaModule,
