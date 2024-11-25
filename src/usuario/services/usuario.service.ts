@@ -37,7 +37,7 @@ export class UsuarioService {
       { id: usuario.id },
       {
         expiresIn: parseInt(
-          process.env.TOKEN_EXPIRATION_TIME || '86400000',
+          process.env.TOKEN_EXPIRATION_TIME || '60000',
           10,
         ),
       },
@@ -48,7 +48,7 @@ export class UsuarioService {
       { id: usuario.id },
       {
         expiresIn: parseInt(
-          process.env.TOKEN_EXPIRATION_TIME || '86400000',
+          process.env.TOKEN_EXPIRATION_TIME || '60000',
           10,
         ),
       },
@@ -59,7 +59,7 @@ export class UsuarioService {
       refreshToken,
       tipo: usuario.tipo,
       tokenExpiration: parseInt(
-        process.env.TOKEN_EXPIRATION_TIME || '86400000',
+        process.env.TOKEN_EXPIRATION_TIME || '60000',
         10,
       ),
     };
@@ -73,7 +73,7 @@ export class UsuarioService {
         { id: payload.id },
         {
           expiresIn: parseInt(
-            process.env.TOKEN_EXPIRATION_TIME || '86400000',
+            process.env.TOKEN_EXPIRATION_TIME || '60000',
             10,
           ),
         },
