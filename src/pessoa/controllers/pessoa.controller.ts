@@ -104,7 +104,8 @@ export class PessoaController {
     if (body.cpf !== undefined) updateData.cpf = body.cpf;
     if (body.nome !== undefined) updateData.nome = body.nome;
     if (body.email !== undefined) updateData.email = body.email;
-    if (body.dataNascimento !== undefined) updateData.dataNascimento = body.dataNascimento;
+    if (body.dataNascimento !== undefined)
+      updateData.dataNascimento = body.dataNascimento;
     if (body.telefone !== undefined) updateData.telefone = body.telefone;
 
     return this.service.update({

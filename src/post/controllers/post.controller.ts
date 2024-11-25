@@ -105,6 +105,7 @@ export class PostController {
     return res.json(data);
   }
 
+  @ApiBearerAuth()
   @Get('admin/search')
   @UseGuards(AuthGuard)
   async adminSearch(
