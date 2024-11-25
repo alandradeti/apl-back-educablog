@@ -18,7 +18,12 @@ export class UsuarioService {
   async signIn(
     login: string,
     senha: string,
-  ): Promise<{ token: string; refreshToken: string; tipo: string }> {
+  ): Promise<{
+    token: string;
+    refreshToken: string;
+    tipo: string;
+    tokenExpiration: number;
+  }> {
     const usuario = await this.repository.findByLogin(login);
 
     if (!usuario) throw new UnauthorizedException('Credenciais inválidas!');
@@ -53,6 +58,10 @@ export class UsuarioService {
       token,
       refreshToken,
       tipo: usuario.tipo,
+      tokenExpiration: parseInt(
+        process.env.TOKEN_EXPIRATION_TIME || '86400000',
+        10,
+      ),
     };
   }
 
