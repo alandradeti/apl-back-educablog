@@ -36,7 +36,7 @@ import { UsuarioModule } from './usuario/usuario.module';
       secret: process.env.JWT_SECRETS,
       signOptions: {
         expiresIn: parseInt(
-          process.env.TOKEN_EXPIRATION_TIME || '86400000',
+          process.env.TOKEN_EXPIRATION_TIME || '60000',
           10,
         ),
       },
