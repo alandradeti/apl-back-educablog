@@ -56,12 +56,10 @@ export class AutenticacaoController {
     },
   })
   async signIn(@Body() { login, senha }: SigInUsuario) {
-    const { token, refreshToken, tipo } = await this.service.signIn(
-      login,
-      senha,
-    );
+    const { token, refreshToken, tipo, tokenExpiration } =
+      await this.service.signIn(login, senha);
 
-    return { token, refreshToken, tipo };
+    return { token, refreshToken, tipo, tokenExpiration };
   }
 
   @Post('refresh-token')
